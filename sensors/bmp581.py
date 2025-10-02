@@ -7,7 +7,7 @@ class BMP581(Sensor):
         super().__init__("BMP581")
         self.sensor = BMP5XX_I2C(board.I2C())
         self.sensor.sea_level_pressure = sea_level_pressure_hpa
-        self.values = self.null_values
+        self.values = self.null_values()
 
     def read(self):
         if self.sensor.data_ready:
@@ -17,7 +17,7 @@ class BMP581(Sensor):
                 "bmp581_altitude_m": round(self.sensor.altitude, 0)
             }
         else:
-            self.values = self.null_values
+            self.values = self.null_values()
 
     def null_values(self):
         return {
