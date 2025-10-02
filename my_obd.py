@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import json
 from sensors.usb_obd import USBOBD
+from sensors.bmp581 import BMP581
 from loggers.json import JSONLogger
 from datetime import datetime
 
@@ -11,7 +12,11 @@ FUEL_DENSITY = 745 # g/L
 HISTORY_LENGTH = 60  # seconds of data
 LOG_FILE = "dashboard_log.json"
 
-usb_odb = USBOBD('/dev/tty.usbserial-1130')
+#usb_odb = USBOBD('/dev/tty.usbserial-1130')
+bmp581 = BMP581()
+
+sensor_list = ["temperature_C", "pressure_hPa", "altitude_m"]
+#sensor_list = list(usb_odb.COMMANDS.keys())
 
 # Data buffers
 sensor_data = []
@@ -24,7 +29,6 @@ fig.suptitle("Live OBD-II Dashboard", fontsize=16)
 plot_lines = {}
 
 # Assign plots
-sensor_list = list(usb_odb.COMMANDS.keys())
 for ax, sensor in zip(axs.flat, sensor_list):
     line, = ax.plot([], [], label=sensor)
     plot_lines[sensor] = line
@@ -47,8 +51,9 @@ def update(frame):
     row = {"timestamp": timestamp}
 
     # Read OBD values
-    usb_odb.read()
-    sensor_data.append(usb_odb.latest_values)
+    #usb_odb.read()
+    bmp581.read()
+    sensor_data.append(bmp581.values)
     if len(sensor_data) > HISTORY_LENGTH:
         sensor_data.pop(0)
 
@@ -83,5 +88,5 @@ try:
     plt.show()
 finally:
     print("Closing connection and log file.")
-    usb_odb.close()
+    #usb_odb.close()
     logger.close()
