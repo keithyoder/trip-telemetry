@@ -54,8 +54,8 @@ def read_sensors():
     while True:
         timestamp = datetime.now(UTC).isoformat()
         bmp581.read()
-        logger.write({"timestamp": timestamp, **bmp581.values})
         time.sleep(1)
+        logger.write({"timestamp": timestamp, **bmp581.values})
 
 def run_async_loop(loop):
     asyncio.set_event_loop(loop)
