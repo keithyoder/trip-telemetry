@@ -48,17 +48,16 @@ def update(frame):
     if len(time_data) > HISTORY_LENGTH:
         time_data.pop(0)
 
-    row = {"timestamp": timestamp}
-
     # Read OBD values
     #usb_odb.read()
     bmp581.read()
+    # Write JSON log entry
+    logger.write({"timestamp": timestamp, **bmp581.values})
+
+
     sensor_data.append(bmp581.values)
     if len(sensor_data) > HISTORY_LENGTH:
         sensor_data.pop(0)
-
-    # Write JSON log entry
-    logger.write(row)
 
     # Update plots
     for sensor, line in plot_lines.items():
