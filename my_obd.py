@@ -15,7 +15,7 @@ LOG_FILE = "dashboard_log.json"
 #usb_odb = USBOBD('/dev/tty.usbserial-1130')
 bmp581 = BMP581()
 
-sensor_list = ["temperature_C", "pressure_hPa", "altitude_m"]
+sensor_list = ["bmp581_temperature_C", "bmp581_pressure_hPa", "bmp581_altitude_m"]
 #sensor_list = list(usb_odb.COMMANDS.keys())
 
 # Data buffers
