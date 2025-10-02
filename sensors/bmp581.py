@@ -11,15 +11,15 @@ class BMP581(Sensor):
     def read(self):
         if self.sensor.data_ready:
             self.values = {
-                "temperature_C": self.sensor.temperature,
-                "pressure_hPa": self.sensor.pressure,
-                "altitude_m": self.sensor.altitude
+                "bmp581_temperature_C": round(self.sensor.temperature, 2),
+                "bmp581_pressure_hPa": round(self.sensor.pressure, 2),
+                "bmp581_altitude_m": round(self.sensor.altitude, 0)
             }
         else:
             self.values = {
-                "temperature_C": None,
-                "pressure_hPa": None,
-                "altitude_m": None
+                "bmp581_temperature_C": None,
+                "bmp581_pressure_hPa": None,
+                "bmp581_altitude_m": None
             }
 
     def is_connected(self):

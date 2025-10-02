@@ -4,7 +4,7 @@ import json
 from sensors.usb_obd import USBOBD
 from sensors.bmp581 import BMP581
 from loggers.json import JSONLogger
-from datetime import datetime
+from datetime import datetime, UTC
 
 # Constants
 AFR = 14.7         # Stoichiometric AFR for gasoline
@@ -43,7 +43,7 @@ logger = JSONLogger(LOG_FILE)
 
 # Update function
 def update(frame):
-    timestamp = datetime.utcnow().isoformat() + "Z"
+    timestamp = datetime.now(UTC).isoformat()
     time_data.append(timestamp)
     if len(time_data) > HISTORY_LENGTH:
         time_data.pop(0)
