@@ -1,0 +1,4 @@
+obd==0.7.3
+matplotlib==3.10.6
+adafruit-circuitpython-bmp5xx==1.0.0
+setuptools==67.7.0
