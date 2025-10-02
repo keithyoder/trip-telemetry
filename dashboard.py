@@ -3,9 +3,16 @@ import dash_daq as daq
 import time
 import asyncio
 import threading
+from datetime import datetime, UTC
 from sensors.bmp581 import BMP581
+from loggers.json import JSONLogger
+
+LOG_FILE = "dashboard_log.json"
+
 bmp581 = BMP581(1019)
+logger = JSONLogger(LOG_FILE)
 app = Dash()
+
 
 app.layout = html.Div([
     daq.LEDDisplay(
@@ -43,14 +50,16 @@ def update_output(n):
         pressure = f"{bmp581.values['bmp581_pressure_hPa']:.1f}"
     return [temperature, pressure]
 
-async def read_sensors_async():
+def read_sensors():
     while True:
+        timestamp = datetime.now(UTC).isoformat()
         bmp581.read()
-        await asyncio.sleep(1)  # Read every 1 second
+        logger.write({"timestamp": timestamp, **bmp581.values})
+        time.sleep(1)
 
 def run_async_loop(loop):
     asyncio.set_event_loop(loop)
-    loop.run_forever(read_sensors_async())
+    loop.run_forever(read_sensors())
 
 if __name__ == '__main__':
     new_loop = asyncio.new_event_loop()
