@@ -1,5 +1,6 @@
 obd==0.7.3
 matplotlib==3.10.6
 adafruit-circuitpython-bmp5xx==1.0.0
+adafruit-circuitpython-ltr390==1.1.21
 setuptools==67.7.0
 dash_daq==0.6.0
