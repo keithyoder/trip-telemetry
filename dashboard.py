@@ -1,5 +1,6 @@
 from dash import Dash, html, dcc, Input, Output, callback
 import dash_daq as daq
+import time
 from sensors.bmp581 import BMP581
 bmp581 = BMP581(1019)
 app = Dash()
@@ -28,7 +29,6 @@ app.layout = html.Div([
     Input('interval-component', 'n_intervals')
 )
 def update_output(n):
-    bmp581.read()
     temperature = bmp581.values['bmp581_temperature_C']
     pressure = bmp581.values['bmp581_pressure_hPa']
     if bmp581.values['bmp581_temperature_C'] is None:
@@ -43,3 +43,7 @@ def update_output(n):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
+    while True:
+        bmp581.read()
+        time.sleep(1)
+
