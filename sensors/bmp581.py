@@ -1,22 +1,21 @@
 import board
-from adafruit_bmp5xx import BMP5XX
+from adafruit_bmp5xx import BMP5XX_I2C
 from sensors.sensor import Sensor
 
 class BMP581(Sensor):
-    def __init__(self):
+    def __init__(self, sea_level_pressure_hpa=1013.25):
         super().__init__("BMP581")
-        self.sensor = BMP5XX()
-        self.sensor.begin()
+        self.sensor = BMP5XX_I2C(board.I2C())
+        self.sensor.sea_level_pressure = sea_level_pressure_hpa
 
     def read(self):
-        try:
-            data = self.sensor.get_sensor_data()
+        if self.sensor.data_ready:
             self.values = {
-                "temperature_C": data.temperature_C,
-                "pressure_hPa": data.pressure_hPa,
-                "altitude_m": data.altitude_m
+                "temperature_C": self.sensor.temperature,
+                "pressure_hPa": self.sensor.pressure,
+                "altitude_m": self.sensor.altitude
             }
-        except:
+        else:
             self.values = {
                 "temperature_C": None,
                 "pressure_hPa": None,
