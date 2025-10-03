@@ -5,11 +5,13 @@ import asyncio
 import threading
 from datetime import datetime, UTC
 from sensors.bmp581 import BMP581
+from sensors.ltr390 import LTR390
 from loggers.json import JSONLogger
 
 LOG_FILE = "dashboard_log.json"
 
 bmp581 = BMP581(1019)
+ltr390 = LTR390()
 logger = JSONLogger(LOG_FILE)
 app = Dash()
 
@@ -25,6 +27,11 @@ app.layout = html.Div([
         label="Barometric Pressure (hPa)",
         value=26.5
     ),
+    daq.LEDDisplay(
+        id='my-LED-display-3',
+        label="Ambient Light (lux)",
+        value=26.5
+    ),
     dcc.Interval(
         id='interval-component',
         interval=1*1000, # in milliseconds
@@ -33,8 +40,11 @@ app.layout = html.Div([
 ])
 
 @callback(
-    [Output('my-LED-display-1', 'value'),
-    Output('my-LED-display-2', 'value')],
+    [
+        Output('my-LED-display-1', 'value'),
+        Output('my-LED-display-2', 'value'),
+        Output('my-LED-display-3', 'value'),
+    ],
     Input('interval-component', 'n_intervals')
 )
 def update_output(n):
@@ -48,14 +58,19 @@ def update_output(n):
         pressure = '----' 
     else:
         pressure = f"{bmp581.values['bmp581_pressure_hPa']:.1f}"
-    return [temperature, pressure]
+    if ltr390.values['ltr390_lux'] is None:    
+        light = '----' 
+    else:
+        light = f"{bmp581.values['ltr390_lux']}"
+    return [temperature, pressure, light]
 
 def read_sensors():
     while True:
         timestamp = datetime.now(UTC).isoformat()
         bmp581.read()
+        ltr390.read()
         time.sleep(1)
-        logger.write({"timestamp": timestamp, **bmp581.values})
+        logger.write({"timestamp": timestamp, **bmp581.values, **ltr390.values})
 
 def run_async_loop(loop):
     asyncio.set_event_loop(loop)

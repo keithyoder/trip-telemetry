@@ -10,9 +10,9 @@ class LTR390(Sensor):
 
     def read(self):
         self.values = {
-            "ltr390_ambient_light": self.sensor.ambient_light,
+            "ltr390_ambient_light": self.sensor.light,
             "ltr390_lux": self.sensor.lux,
-            "ltr390_uv_index": self.sensor.uv_index
+            "ltr390_uv_index": self.sensor.uvi
         }
 
     def null_values(self):
