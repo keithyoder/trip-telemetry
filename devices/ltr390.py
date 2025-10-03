@@ -9,6 +9,7 @@ class LTR390(Device):
     def __init__(self):
         super().__init__("LTR390")
         self.device = adafruit_ltr390.LTR390(I2C())
+        self.values = {}
         self.sensors = [
             AmbientLight(self.device),
             Lux(self.device),
@@ -16,10 +17,9 @@ class LTR390(Device):
         ]
 
     def read(self):
-        values = {}
+        self.values = {}
         for sensor in self.sensors:
-            values[sensor.key] = sensor.value()
-        return values
+            self.values[sensor.key] = sensor.value()
 
     def is_connected(self):
         return self.device.data_ready
