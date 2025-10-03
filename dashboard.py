@@ -94,7 +94,7 @@ def read_sensors():
                 device.read()
         time.sleep(1)
         for device in devices:
-            values += device.values
+            values.update(device.values)
         
         logger.write(values)
 
