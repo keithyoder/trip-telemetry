@@ -72,15 +72,15 @@ def update_output(n):
     temperature = bmp581.values['bmp581_temperature_C']
     pressure = bmp581.values['bmp581_pressure_hPa']
     if bmp581.values['bmp581_temperature_C'] is None:
-        temperature = '----' 
+        temperature = '0' 
     else:
         temperature = f"{bmp581.values['bmp581_temperature_C']:.1f}"
     if bmp581.values['bmp581_pressure_hPa'] is None:    
-        pressure = '----' 
+        pressure = '0' 
     else:
         pressure = f"{bmp581.values['bmp581_pressure_hPa']:.1f}"
     if ltr390.values['ltr390_lux'] is None:    
-        light = '----' 
+        light = '0' 
     else:
         light = f"{ltr390.values['ltr390_lux']:.0f}"
     return [float(temperature), pressure, light]
