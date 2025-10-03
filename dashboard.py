@@ -15,42 +15,55 @@ ltr390 = LTR390()
 logger = JSONLogger(LOG_FILE)
 app = Dash()
 
-
-app.layout = html.Div([
-    daq.Thermometer(
-        id='thermometer-1',
-        min=0,
-        max=40,
-        value=20,
-        showCurrentValue=True,
-        units="C"
-    ),
-    daq.LEDDisplay(
-        id='my-LED-display-1',
-        label="Temperature (°C)",
-        value=26.5
-    ),
-    daq.LEDDisplay(
-        id='my-LED-display-2',
-        label="Barometric Pressure (hPa)",
-        value=26.5
-    ),
-    daq.LEDDisplay(
-        id='my-LED-display-3',
-        label="Ambient Light (lux)",
-        value=26.5
-    ),
-    dcc.Interval(
-        id='interval-component',
-        interval=1*1000, # in milliseconds
-        n_intervals=0
-    )
-])
+app.layout = html.Div(
+    style={
+        "display": "grid",
+        "gridTemplateColumns": "repeat(4, 1fr)",  # 4 columns
+        "gridTemplateRows": "repeat(3, auto)",   # 3 rows
+        "gap": "20px",
+        "padding": "20px"
+    },
+    children=[
+        daq.Thermometer(
+            id='thermometer-1',
+            min=0,
+            max=40,
+            value=20,
+            height=120,
+            showCurrentValue=True,
+            units="C",
+            style={"gridColumn": "span 2", "gridRow": "span 2"}
+        ),
+        daq.LEDDisplay(
+            id='my-LED-display-1',
+            label="Temperature (°C)",
+            value=26.5,
+            style={"gridColumn": "3 / span 1", "gridRow": "1 / span 1"}
+        ),
+        daq.LEDDisplay(
+            id='my-LED-display-2',
+            label="Barometric Pressure (hPa)",
+            value=26.5,
+            style={"gridColumn": "4 / span 1", "gridRow": "1 / span 1"}
+        ),
+        daq.LEDDisplay(
+            id='my-LED-display-3',
+            label="Ambient Light (lux)",
+            value=26.5,
+            style={"gridColumn": "3 / span 2", "gridRow": "2 / span 1"}
+        ),
+        dcc.Interval(
+            id='interval-component',
+            interval=1*1000, # in milliseconds
+            n_intervals=0,
+            style={"gridColumn": "4 / span 1", "gridRow": "2 / span 1"}
+        )
+    ]
+)
 
 @callback(
     [
         Output('thermometer-1', 'value'),
-        Output('my-LED-display-1', 'value'),
         Output('my-LED-display-2', 'value'),
         Output('my-LED-display-3', 'value'),
     ],
@@ -71,7 +84,7 @@ def update_output(n):
         light = '----' 
     else:
         light = f"{ltr390.values['ltr390_lux']:.0f}"
-    return [float(temperature), temperature, pressure, light]
+    return [float(temperature), pressure, light]
 
 def read_sensors():
     while True:
