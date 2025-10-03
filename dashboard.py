@@ -71,7 +71,7 @@ def update_output(n):
         light = '----' 
     else:
         light = f"{ltr390.values['ltr390_lux']:.0f}"
-    return [temperature, temperature, pressure, light]
+    return [float(temperature), temperature, pressure, light]
 
 def read_sensors():
     while True:
