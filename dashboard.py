@@ -87,8 +87,8 @@ def update_output(n):
 
 def read_sensors():
     while True:
-        timestamp = datetime.now(UTC).isoformat()
-        values = {"timestamp": timestamp}
+        timestamp = datetime.now(UTC).replace(microsecond=0).isoformat()
+        values["timestamp"] = timestamp
         for device in devices:
             if device.is_connected():
                 device.read()
