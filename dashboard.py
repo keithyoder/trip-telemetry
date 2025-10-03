@@ -61,7 +61,7 @@ def update_output(n):
     if ltr390.values['ltr390_lux'] is None:    
         light = '----' 
     else:
-        light = f"{bmp581.values['ltr390_lux']}"
+        light = f"{ltr390.values['ltr390_lux']}"
     return [temperature, pressure, light]
 
 def read_sensors():
