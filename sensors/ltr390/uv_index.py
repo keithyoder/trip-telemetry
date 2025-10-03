@@ -1,6 +1,7 @@
+from sensors.sensor import Sensor
 from dash_daq import LEDDisplay
 
-class UVIndex:
+class UVIndex(Sensor):
     def __init__(self, device):
         super().__init__(self, device, "ltr390_uv_index", "raw")
 

@@ -1,6 +1,7 @@
+from sensors.sensor import Sensor
 from dash_daq import LEDDisplay
 
-class AmbientLight:
+class AmbientLight(Sensor):
     def __init__(self, device):
         super().__init__(self, device, "ltr390_ambient_light", "raw")
 
