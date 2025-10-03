@@ -1,13 +1,9 @@
 class Sensor:
-    def __init__(self, name):
-        self.name = name
-        self.values = {}
-
-    def read_values(self):
-        raise NotImplementedError("This method should be overridden by subclasses.")
-
-    def is_connected(self):
-        raise NotImplementedError("This method should be overridden by subclasses.")
-
-    def __str__(self):
-        return f"Sensor: {self.name}"
+    def __init__(self, device, key, unit, precision=2):
+        self.device = device
+        self.key = key
+        self.unit = unit
+        self.precision = precision
+        
+    def value(self, value):
+        return round(value, self.precision)

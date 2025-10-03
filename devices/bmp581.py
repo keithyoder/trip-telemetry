@@ -1,8 +1,8 @@
 import board
 from adafruit_bmp5xx import BMP5XX_I2C
-from sensors.sensor import Sensor
+from devices.device import Device
 
-class BMP581(Sensor):
+class BMP581(Device):
     def __init__(self, sea_level_pressure_hpa=1013.25):
         super().__init__("BMP581")
         self.sensor = BMP5XX_I2C(board.I2C())

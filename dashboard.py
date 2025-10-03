@@ -4,14 +4,20 @@ import time
 import asyncio
 import threading
 from datetime import datetime, UTC
-from sensors.bmp581 import BMP581
-from sensors.ltr390 import LTR390
+from devices.bmp581 import BMP581
+from devices.ltr390 import LTR390
+from devices.usb_obd import USBOBD
 from loggers.json import JSONLogger
 
 LOG_FILE = "dashboard_log.json"
 
 bmp581 = BMP581(1019)
 ltr390 = LTR390()
+usb_odb = USBOBD('/dev/tty.usbserial-1130')
+
+devices = [bmp581, ltr390, usb_odb]
+values = {}
+
 logger = JSONLogger(LOG_FILE)
 app = Dash()
 
@@ -32,31 +38,24 @@ app.layout = html.Div(
             height=120,
             showCurrentValue=True,
             units="C",
-            style={"gridColumn": "span 2", "gridRow": "span 2"}
-        ),
-        daq.LEDDisplay(
-            id='my-LED-display-1',
-            label="Temperature (°C)",
-            value=26.5,
-            style={"gridColumn": "3 / span 1", "gridRow": "1 / span 1"}
+            style={"gridColumn": "span 2", "gridRow": "span 1"}
         ),
         daq.LEDDisplay(
             id='my-LED-display-2',
             label="Barometric Pressure (hPa)",
             value=26.5,
-            style={"gridColumn": "4 / span 1", "gridRow": "1 / span 1"}
+            style={"gridColumn": "2 / span 1", "gridRow": "1 / span 1"}
         ),
         daq.LEDDisplay(
             id='my-LED-display-3',
             label="Ambient Light (lux)",
             value=26.5,
-            style={"gridColumn": "3 / span 2", "gridRow": "2 / span 1"}
+            style={"gridColumn": "3 / span 1", "gridRow": "1 / span 1"}
         ),
         dcc.Interval(
             id='interval-component',
             interval=1*1000, # in milliseconds
-            n_intervals=0,
-            style={"gridColumn": "4 / span 1", "gridRow": "2 / span 1"}
+            n_intervals=0
         )
     ]
 )
@@ -89,10 +88,15 @@ def update_output(n):
 def read_sensors():
     while True:
         timestamp = datetime.now(UTC).isoformat()
-        bmp581.read()
-        ltr390.read()
+        values = {"timestamp": timestamp}
+        for device in devices:
+            if device.is_connected():
+                device.read()
         time.sleep(1)
-        logger.write({"timestamp": timestamp, **bmp581.values, **ltr390.values})
+        for device in devices:
+            values += device.values
+        
+        logger.write(values)
 
 def run_async_loop(loop):
     asyncio.set_event_loop(loop)

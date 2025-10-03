@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-import json
-from sensors.usb_obd import USBOBD
-from sensors.bmp581 import BMP581
+from devices.usb_obd import USBOBD
+from devices.bmp581 import BMP581
+from obd import commands
 from loggers.json import JSONLogger
 from datetime import datetime, UTC
 
@@ -12,8 +12,20 @@ FUEL_DENSITY = 745 # g/L
 HISTORY_LENGTH = 60  # seconds of data
 LOG_FILE = "dashboard_log.json"
 
-#usb_odb = USBOBD('/dev/tty.usbserial-1130')
-bmp581 = BMP581()
+usb_odb = USBOBD('/dev/tty.usbserial-1130')
+usb_odb.commands = {
+        "RPM": commands.RPM,
+        "Throttle": commands.THROTTLE_POS,
+        "Coolant Temp": commands.COOLANT_TEMP,
+        "Engine Load": commands.ENGINE_LOAD,
+        "Speed": commands.SPEED,
+        "Fuel Level": commands.FUEL_LEVEL,
+        "MAF": commands.MAF,
+        "Fuel Rate": commands.FUEL_RATE  # may return None
+    }
+#bmp581 = BMP581()
+
+devices = [usb_odb]
 
 sensor_list = ["bmp581_temperature_C", "bmp581_pressure_hPa", "bmp581_altitude_m"]
 #sensor_list = list(usb_odb.COMMANDS.keys())
@@ -48,9 +60,12 @@ def update(frame):
     if len(time_data) > HISTORY_LENGTH:
         time_data.pop(0)
 
-    # Read OBD values
-    #usb_odb.read()
-    bmp581.read()
+    for device in devices:
+        if device.is_connected():
+            device.read()
+        else:
+            print(f"Device {device.name} not connected.")
+
     # Write JSON log entry
     logger.write({"timestamp": timestamp, **bmp581.values})
 
