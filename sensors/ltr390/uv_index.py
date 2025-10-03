@@ -3,7 +3,7 @@ from dash_daq import LEDDisplay
 
 class UVIndex(Sensor):
     def __init__(self, device):
-        super().__init__(self, device, "ltr390_uv_index", "raw")
+        super().__init__(device, "ltr390_uv_index", "raw")
 
     def value(self):
         try:
