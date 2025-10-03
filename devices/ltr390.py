@@ -18,7 +18,7 @@ class LTR390(Device):
     def read(self):
         values = {}
         for sensor in self.sensors:
-            values += {sensor.key, sensor.value()}
+            values.update({sensor.key, sensor.value()})
         return values
 
     def is_connected(self):
