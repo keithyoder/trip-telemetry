@@ -79,7 +79,7 @@ def update_output(n):
         pressure = '0' 
     else:
         pressure = f"{bmp581.values['bmp581_pressure_hPa']:.1f}"
-    if ltr390.values['ltr390_lux'] is None:    
+    if 'ltr390_lux' not in ltr390.values:    
         light = '0' 
     else:
         light = f"{ltr390.values['ltr390_lux']:.0f}"
