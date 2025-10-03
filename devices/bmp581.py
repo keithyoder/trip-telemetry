@@ -27,4 +27,4 @@ class BMP581(Device):
         }
 
     def is_connected(self):
-        return self.sensor.is_connected()
+        return self.sensor.data_ready
