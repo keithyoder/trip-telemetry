@@ -3,7 +3,7 @@ from dash_daq import LEDDisplay
 
 class Lux(Sensor):
     def __init__(self, device):
-        super().__init__(self, device, "ltr390_lux", "lumens")
+        super().__init__(device, "ltr390_lux", "lumens")
 
     def value(self):
         try:
