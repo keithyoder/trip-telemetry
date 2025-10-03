@@ -17,6 +17,14 @@ app = Dash()
 
 
 app.layout = html.Div([
+    daq.Thermometer(
+        id='thermometer-1',
+        min=0,
+        max=40,
+        value=20,
+        showCurrentValue=True,
+        units="C"
+    ),
     daq.LEDDisplay(
         id='my-LED-display-1',
         label="Temperature (°C)",
@@ -41,6 +49,7 @@ app.layout = html.Div([
 
 @callback(
     [
+        Output('thermometer-1', 'value'),
         Output('my-LED-display-1', 'value'),
         Output('my-LED-display-2', 'value'),
         Output('my-LED-display-3', 'value'),
@@ -61,8 +70,8 @@ def update_output(n):
     if ltr390.values['ltr390_lux'] is None:    
         light = '----' 
     else:
-        light = f"{ltr390.values['ltr390_lux']}"
-    return [temperature, pressure, light]
+        light = f"{ltr390.values['ltr390_lux']:.0f}"
+    return [temperature, temperature, pressure, light]
 
 def read_sensors():
     while True:
