@@ -22,4 +22,4 @@ class LTR390(Device):
             self.values[sensor.key] = sensor.value()
 
     def is_connected(self):
-        return self.device.data_ready
+        return self.device is not None
