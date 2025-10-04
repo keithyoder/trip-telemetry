@@ -69,20 +69,21 @@ app.layout = html.Div(
     Input('interval-component', 'n_intervals')
 )
 def update_output(n):
-    temperature = bmp581.values['bmp581_temperature_C']
-    pressure = bmp581.values['bmp581_pressure_hPa']
-    if bmp581.values['bmp581_temperature_C'] is None:
+    if 'bmp581_temperature' not in values:
         temperature = '0' 
     else:
-        temperature = f"{bmp581.values['bmp581_temperature_C']:.1f}"
-    if bmp581.values['bmp581_pressure_hPa'] is None:    
+        temperature = f"{values['bmp581_temperature']:.1f}"
+
+    if 'bmp581_pressure' not in values:    
         pressure = '0' 
     else:
-        pressure = f"{bmp581.values['bmp581_pressure_hPa']:.1f}"
-    if 'ltr390_lux' not in ltr390.values:    
+        pressure = f"{values['bmp581_pressure']:.1f}"
+
+    if 'ltr390_lux' not in values:    
         light = '0' 
     else:
-        light = f"{ltr390.values['ltr390_lux']:.0f}"
+        light = f"{values['ltr390_lux']:.0f}"
+
     return [float(temperature), pressure, light]
 
 def read_sensors():

@@ -16,10 +16,5 @@ class LTR390(Device):
             UVIndex(self.device)
         ]
 
-    def read(self):
-        self.values = {}
-        for sensor in self.sensors:
-            self.values[sensor.key] = sensor.value()
-
     def is_connected(self):
         return self.device is not None
