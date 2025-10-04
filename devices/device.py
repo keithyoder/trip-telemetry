@@ -5,7 +5,6 @@ class Device:
 
     def read(self):
         if self.is_connected():
-            self.values = {}
             for sensor in self.sensors:
                 self.values[sensor.key] = sensor.value()
 
