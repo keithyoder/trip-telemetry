@@ -9,9 +9,8 @@ class LTR390(Device):
     def __init__(self):
         super().__init__("LTR390")
         self.device = adafruit_ltr390.LTR390(I2C())
-        self.device.gain = adafruit_ltr390.GAIN_1X
-        self.device.resolution = adafruit_ltr390.RESOLUTION_20BIT
-        self.device.mode = adafruit_ltr390.MODE_UV_AND_ALS
+        self.device.gain = adafruit_ltr390.Gain.GAIN_1X
+        self.device.resolution = adafruit_ltr390.Resolution.RESOLUTION_20BIT
         self.values = {}
         self.sensors = [
             AmbientLight(self.device),
