@@ -40,12 +40,7 @@ app.layout = html.Div(
             units="C",
             style={"gridColumn": "span 2", "gridRow": "span 1"}
         ),
-        daq.LEDDisplay(
-            id='my-LED-display-2',
-            label="Barometric Pressure (hPa)",
-            value=26.5,
-            style={"gridColumn": "2 / span 1", "gridRow": "1 / span 1"}
-        ),
+        bmp581.sensor("bmp581_pressure").dashboard_gauge(),
         daq.LEDDisplay(
             id='my-LED-display-3',
             label="Ambient Light (lux)",
@@ -63,7 +58,7 @@ app.layout = html.Div(
 @callback(
     [
         Output('thermometer-1', 'value'),
-        Output('my-LED-display-2', 'value'),
+        Output('bmp581_pressure', 'value'),
         Output('my-LED-display-3', 'value'),
     ],
     Input('interval-component', 'n_intervals')
