@@ -30,23 +30,9 @@ app.layout = html.Div(
         "padding": "20px"
     },
     children=[
-        daq.Thermometer(
-            id='thermometer-1',
-            min=0,
-            max=40,
-            value=20,
-            height=120,
-            showCurrentValue=True,
-            units="C",
-            style={"gridColumn": "span 2", "gridRow": "span 1"}
-        ),
         bmp581.sensor("bmp581_pressure").dashboard_gauge(),
-        daq.LEDDisplay(
-            id='my-LED-display-3',
-            label="Ambient Light (lux)",
-            value=26.5,
-            style={"gridColumn": "3 / span 1", "gridRow": "1 / span 1"}
-        ),
+        ltr390.sensor("ltr390_ambient_light").dashboard_gauge(),
+        bmp581.sensor("bmp581_temperature").dashboard_gauge(),
         dcc.Interval(
             id='interval-component',
             interval=1*1000, # in milliseconds
@@ -57,9 +43,9 @@ app.layout = html.Div(
 
 @callback(
     [
-        Output('thermometer-1', 'value'),
+        Output('bmp581_temperature', 'value'),
         Output('bmp581_pressure', 'value'),
-        Output('my-LED-display-3', 'value'),
+        Output('ltr390_ambient_light', 'value'),
     ],
     Input('interval-component', 'n_intervals')
 )

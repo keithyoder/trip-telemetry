@@ -1,5 +1,5 @@
 from sensors.sensor import Sensor
-from dash_daq import LEDDisplay
+from dash_daq import Thermometer
 
 class Temperature(Sensor):
     def __init__(self, device):
@@ -12,8 +12,12 @@ class Temperature(Sensor):
             return None
 
     def dashboard_gauge(self):
-        return LEDDisplay(
+        return Thermometer(
             id=self.key,
-            label="Temperature (C)",
-            value=26.5
+            min=0,
+            max=40,
+            value=20,
+            height=120,
+            showCurrentValue=True,
+            units="C"
         )
