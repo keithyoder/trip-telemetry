@@ -3,7 +3,7 @@ from dash_daq import LEDDisplay
 
 class Pressure(Sensor):
     def __init__(self, device):
-        super().__init__(self, device, "bmp581_pressure", "hPa", precision=1)
+        super().__init__(device, "bmp581_pressure", "hPa", precision=1)
 
     def value(self):
         try:

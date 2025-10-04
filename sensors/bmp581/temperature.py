@@ -3,7 +3,7 @@ from dash_daq import LEDDisplay
 
 class Temperature(Sensor):
     def __init__(self, device):
-        super().__init__(self, device, "bmp581_temperature", "C")
+        super().__init__(device, "bmp581_temperature", "C")
 
     def value(self):
         try:
