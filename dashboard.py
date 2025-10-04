@@ -7,15 +7,17 @@ from datetime import datetime, UTC
 from devices.bmp581 import BMP581
 from devices.ltr390 import LTR390
 from devices.usb_obd import USBOBD
+from devices.shtc3 import SHTC3
 from loggers.json import JSONLogger
 
 LOG_FILE = "dashboard_log.json"
 
 bmp581 = BMP581(1019)
 ltr390 = LTR390()
+shtc3 = SHTC3()
 usb_odb = USBOBD('/dev/tty.usbserial-1130')
 
-devices = [bmp581, ltr390, usb_odb]
+devices = [bmp581, ltr390, usb_odb, shtc3]
 values = {}
 
 logger = JSONLogger(LOG_FILE)
