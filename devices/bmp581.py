@@ -7,7 +7,7 @@ from sensors.bmp581.pressure import Pressure
 class BMP581(Device):
     def __init__(self, sea_level_pressure_hpa=1013.25):
         super().__init__("BMP581")
-        self.devide = BMP5XX_I2C(board.I2C())
+        self.device = BMP5XX_I2C(board.I2C())
         self.device.sea_level_pressure = sea_level_pressure_hpa
         self.sensors = [
             Temperature(self.device),
