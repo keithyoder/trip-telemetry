@@ -13,10 +13,10 @@ class GPS(Device):
         self.report = None
         self.device = None
         self.sensors = [
-            Latitude(self.device),
-            Longitude(self.device),
-            Altitude(self.device),
-            Speed(self.device)
+            Latitude(self),
+            Longitude(self),
+            Altitude(self),
+            Speed(self)
         ]
 
     def read(self):
