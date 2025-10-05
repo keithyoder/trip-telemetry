@@ -8,7 +8,7 @@ from devices.bmp581 import BMP581
 from devices.ltr390 import LTR390
 from devices.usb_obd import USBOBD
 from devices.shtc3 import SHTC3
-from devices.usb_gps import USBGPS
+from devices.gps import GPS
 from loggers.mongodb import MongoDBLogger
 
 LOG_FILE = "dashboard_log.json"
@@ -16,7 +16,7 @@ LOG_FILE = "dashboard_log.json"
 bmp581 = BMP581(1019)
 ltr390 = LTR390()
 shtc3 = SHTC3()
-usb_gps = USBGPS()
+usb_gps = GPS()
 usb_odb = USBOBD('/dev/tty.usbserial-1130')
 
 devices = [bmp581, ltr390, usb_odb, shtc3, usb_gps]
