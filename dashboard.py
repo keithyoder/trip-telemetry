@@ -52,10 +52,10 @@ app.layout = html.Div(
     Input('interval-component', 'n_intervals')
 )
 def update_output(n):
-    if 'bmp581_temperature' not in values:
+    if 'shtc3_temperature' not in values:
         temperature = '0' 
     else:
-        temperature = f"{values['bmp581_temperature']:.1f}"
+        temperature = f"{values['shtc3_temperature']:.1f}"
 
     if 'bmp581_pressure' not in values:    
         pressure = '0' 
