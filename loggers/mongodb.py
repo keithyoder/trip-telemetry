@@ -16,3 +16,24 @@ class MongoDBLogger:
         except Exception as e:
             # avoid infinite recursion in case logging fails
             print(f"Mongo logging error: {e}")
+
+    def avg_per_minute(self, key):
+        pipeline = [
+            {
+                '$addFields': {
+                    'ts': { '$toDate': "$timestamp" }
+                }
+            },
+            {
+                '$group': {
+                    '_id': {
+                        '$dateTrunc': { 'date': "$ts", 'unit': "minute" }
+                    },
+                    'average': {'$avg': f'${key}'}
+                }
+            },
+            {
+                '$sort': {'_id': 1}
+            }
+        ]
+        return list(self.collection.aggregate(pipeline))
