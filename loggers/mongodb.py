@@ -10,4 +10,8 @@ class MongoDBLogger:
         self.client.close()
 
     def write(self, data):
-        self.collection.insert_one(data)
+        try:
+            self.collection.insert_one(data)
+        except Exception as e:
+            # avoid infinite recursion in case logging fails
+            print(f"Mongo logging error: {e}")
