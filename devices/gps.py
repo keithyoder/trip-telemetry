@@ -11,11 +11,12 @@ class GPS(Device):
         gpsd.connect()
         self.values = {}
         self.report = None
+        self.device = None
         self.sensors = [
-            Latitude(self),
-            Longitude(self),
-            Altitude(self),
-            Speed(self)
+            Latitude(self.device),
+            Longitude(self.device),
+            Altitude(self.device),
+            Speed(self.device)
         ]
 
     def read(self):
@@ -23,4 +24,4 @@ class GPS(Device):
         super().read()
 
     def is_connected(self):
-        return self.device.data_ready
+        return True
