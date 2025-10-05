@@ -5,3 +5,4 @@ adafruit-circuitpython-ltr390==1.1.21
 adafruit-circuitpython-shtc3==1.1.19
 setuptools==67.7.0
 dash_daq==0.6.0
+pymongo==4.15.2

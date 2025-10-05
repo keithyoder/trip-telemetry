@@ -8,7 +8,7 @@ from devices.bmp581 import BMP581
 from devices.ltr390 import LTR390
 from devices.usb_obd import USBOBD
 from devices.shtc3 import SHTC3
-from loggers.json import JSONLogger
+from loggers.mongodb import MongoDBLogger
 
 LOG_FILE = "dashboard_log.json"
 
@@ -20,7 +20,7 @@ usb_odb = USBOBD('/dev/tty.usbserial-1130')
 devices = [bmp581, ltr390, usb_odb, shtc3]
 values = {}
 
-logger = JSONLogger(LOG_FILE)
+logger = MongoDBLogger()
 app = Dash()
 
 app.layout = html.Div(
