@@ -11,6 +11,7 @@ class MongoDBLogger:
 
     def write(self, data):
         try:
+            data['_id'] = None  # let MongoDB create the ID
             self.collection.insert_one(data)
         except Exception as e:
             # avoid infinite recursion in case logging fails
