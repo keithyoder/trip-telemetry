@@ -33,11 +33,36 @@ class Temperature(Sensor):
                     "thickness": 0.75,
                     "value": current
                 }
+                "threshold": {
+                    "line": {"color": "black", "width": 4},
+                    "thickness": 0.75,
+                    "value": current
+                }
+                "threshold": {
+                    "line": {"color": "black", "width": 4},
+                    "thickness": 0.75,
+                    "value": current
+                }
             }
         ))
+        for t in [min, max]:
+            fig.add_shape(
+                type="line",
+                x0=0.5, x1=0.5,  # center of gauge
+                y0=0, y1=1,      # spans the gauge
+                xref="paper", yref="paper",
+                line=dict(color=t["color"], width=3),
+                name=f"thr_{t['value']}"
+            )
+            fig.add_annotation(
+                x=0.5, y=1.05, xref="paper", yref="paper",
+                text=f"{t['label']}: {t['value']}°C",
+                showarrow=False,
+                font=dict(color=t["color"], size=12)
+            )
         fig.update_layout(
-            height=400,  # increase height
-            width=500,   # increase width
+            height=200,  # increase height
+            width=300,   # increase width
             margin=dict(l=40, r=40, t=60, b=40)
         )
         return fig
