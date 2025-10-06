@@ -1,11 +1,23 @@
 from pymongo import MongoClient
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 
 class MongoDBLogger:
     def __init__(self):
         self.client = MongoClient('localhost', 27017)
         self.db = self.client['pi_i2c_logger']
         self.collection = self.db['logs']
+        self.local_tz = datetime.now().astimezone().tzinfo
+
+    def today_start(self):
+        local_midnight = datetime.now(self.local_tz).replace(hour=0, minute=0, second=0, microsecond=0)
+
+        # Convert to UTC
+        return local_midnight.astimezone(ZoneInfo("UTC"))
+    
+    def tomorrow_start(self):
+        local_midnight = datetime.now(self.local_tz).replace(hour=0, minute=0, second=0, microsecond=0)
+        return (local_midnight + timedelta(days=1)).astimezone(ZoneInfo("UTC"))
 
     def close(self):
         self.client.close()
@@ -40,8 +52,6 @@ class MongoDBLogger:
         return list(self.collection.aggregate(pipeline))
     
     def daily_max_min(self, key):
-        today_start = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
-        tomorrow_start = today_start + timedelta(days=1)
         pipeline = [
             {
                 '$addFields': {
@@ -51,8 +61,8 @@ class MongoDBLogger:
             {
                 "$match": {
                     "ts": {
-                        "$gte": today_start,
-                        "$lt": tomorrow_start
+                        "$gte": self.today_start(),
+                        "$lt": self.tomorrow_start()
                     }
                 }
             },
