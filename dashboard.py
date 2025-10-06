@@ -47,7 +47,7 @@ app.layout = html.Div(
 
 @callback(
     [
-        Output('shtc3_temperature', 'figure'),
+        Output('shtc3_temperature', 'value'),
         Output('bmp581_pressure', 'value'),
         Output('ltr390_ambient_light', 'value'),
     ],
