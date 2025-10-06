@@ -38,6 +38,7 @@ class Temperature(Sensor):
         #     id=self.key
         # )
         return GraduatedBar(
+            id=self.key
             color={"gradient":True,"ranges":{"blue":[0,15],"yellow":[15,30],"red":[30,40]}},
             showCurrentValue=True,
             step=0.5,
