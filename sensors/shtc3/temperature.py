@@ -72,7 +72,7 @@ class Temperature(Sensor):
         )
 
         fig = go.Figure([base_gauge, min_threshold, max_threshold])
-        fig.update_layout(height=200, width=300)
+        fig.update_layout(height=300, width=400)
 
         return fig
 
