@@ -15,7 +15,7 @@ class Temperature(Sensor):
             return None
 
     def figure(self, min, max, current):
-        return go.Figure(go.Indicator(
+        fig = go.Figure(go.Indicator(
             mode="gauge+number",
             value=current,
             title={"text": "Room Temperature (°C)"},
@@ -35,6 +35,12 @@ class Temperature(Sensor):
                 }
             }
         ))
+        fig.update_layout(
+            height=400,  # increase height
+            width=500,   # increase width
+            margin=dict(l=40, r=40, t=60, b=40)
+        )
+        return fig
 
     def dashboard_gauge(self):
         return dcc.Graph(
