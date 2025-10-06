@@ -18,7 +18,7 @@ class Temperature(Sensor):
         base_gauge = go.Indicator(
                 mode="gauge+number",
                 value=current,
-                title={"text": "Room Temperature (°C)"},
+                title={"text": "Temperature (°C)"},
                 gauge={
                     "axis": {"range": [0, 40]},
                     "bar": {"color": "black"},
@@ -63,7 +63,7 @@ class Temperature(Sensor):
                 "bgcolor": "rgba(0,0,0,0)",
                 "steps": [],
                 "threshold": {
-                    "line": {"color": "red", "width": 4},
+                    "line": {"color": "yello", "width": 4},
                     "thickness": 0.75,
                     "value": max
                 }
@@ -72,7 +72,7 @@ class Temperature(Sensor):
         )
 
         fig = go.Figure([base_gauge, min_threshold, max_threshold])
-        fig.update_layout(height=400, width=500)
+        fig.update_layout(height=200, width=300)
 
         return fig
 
