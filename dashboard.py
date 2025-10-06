@@ -56,8 +56,8 @@ app.layout = html.Div(
 def update_output(n):
     temperature_today = logger.daily_max_min("shtc3_temperature")
     figure = shtc3.sensor("shtc3_temperature").figure(
-        min=temperature_today,
-        max=temperature_today,
+        min=temperature_today[0]['minReading']['value'],
+        max=temperature_today[0]['maxReading']['value'],
         current=values.get("shtc3_temperature", 0)
     )
     if 'bmp581_pressure' not in values:    
