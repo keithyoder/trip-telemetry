@@ -56,16 +56,13 @@ app.layout = html.Div(
     Input('interval-component', 'n_intervals')
 )
 def update_output(n):
-    temperature_today = logger.daily_max_min("shtc3_temperature")
     figure = shtc3.sensor("shtc3_temperature").figure(
-        min=temperature_today[0]['minReading']['value'],
-        max=temperature_today[0]['maxReading']['value'],
-        current=values.get("shtc3_temperature", 0)
+        current=values.get("shtc3_temperature", 0),
+        daily_range=logger.daily_max_min("shtc3_temperature")[0]
     )
     humidity = shtc3.sensor("shtc3_humidity").figure(
-        min=temperature_today[0]['minReading']['value'],
-        max=temperature_today[0]['maxReading']['value'],
-        current=values.get("shtc3_humidity", 0)
+        current=values.get("shtc3_humidity", 0),
+        daily_range=logger.daily_max_min("shtc3_humidity")[0]
     )
     if 'bmp581_pressure' not in values:    
         pressure = '0' 

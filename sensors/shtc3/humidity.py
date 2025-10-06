@@ -12,8 +12,8 @@ class Humidity(Sensor):
         except:
             return None
 
-    def figure(self, min, max, current):
-        return super().current_max_min(max, min, current)
+    def figure(self, current, daily_range):
+        return super().current_max_min(current, daily_range)
 
     def dashboard_gauge(self):
         return dcc.Graph(

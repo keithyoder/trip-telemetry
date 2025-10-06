@@ -13,7 +13,7 @@ class Sensor:
     def value(self, value):
         return round(value, self.precision)
 
-    def current_max_min(self, min, max, current):
+    def current_max_min(self, current, daily_range):
         step = (self.max - self.min) / 4
         base_gauge = go.Indicator(
                 mode="gauge+number",
@@ -48,7 +48,7 @@ class Sensor:
                 "threshold": {
                     "line": {"color": "green", "width": 4},
                     "thickness": 0.75,
-                    "value": min
+                    "value": daily_range['minReading']['value']
                 }
             },
             domain={'x': [0, 1], 'y': [0, 1]}  # overlay exactly
@@ -65,13 +65,26 @@ class Sensor:
                 "threshold": {
                     "line": {"color": "yellow", "width": 4},
                     "thickness": 0.75,
-                    "value": max
+                    "value": daily_range['maxReading']['value']
                 }
             },
             domain={'x': [0, 1], 'y': [0, 1]}
         )
 
         fig = go.Figure([base_gauge, min_threshold, max_threshold])
+        fig.add_annotation(
+            x=0.5, y=-0.2, xref="paper", yref="paper",
+            text=f"Min: {daily_range['minReading']['value']:.1f} {self.unit} at {daily_range['minReading']['time'].strftime('%Y-%m-%d %H:%M:%S %Z')}",
+            showarrow=False,
+            font=dict(size=14, color="green")
+        )
+
+        fig.add_annotation(
+            x=0.5, y=-0.3, xref="paper", yref="paper",
+            text=f"Max: {daily_range['maxReading']['value']:.1f} {self.unit} at {daily_range['minReading']['time'].strftime('%Y-%m-%d %H:%M:%S %Z')}",
+            showarrow=False,
+            font=dict(size=14, color="red")
+        )
         fig.update_layout(height=300, width=400)
 
         return fig
