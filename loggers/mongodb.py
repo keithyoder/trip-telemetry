@@ -61,18 +61,18 @@ class MongoDBLogger:
                     "_id": None,
                     "maxReading": {
                         "$top": {
-                            "sortBy": {"shtc3_temperature": -1},
+                            "sortBy": {key: -1},
                             "output": {
-                                "value": "$shtc3_temperature",
+                                "value": "$"+key,
                                 "time": "$timestamp"
                             }
                         }
                     },
                     "minReading": {
                         "$top": {
-                            "sortBy": {"shtc3_temperature": 1},
+                            "sortBy": {key: 1},
                             "output": {
-                                "value": "$shtc3_temperature",
+                                "value": "$"+key,
                                 "time": "$timestamp"
                             }
                         }
