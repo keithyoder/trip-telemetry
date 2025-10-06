@@ -14,6 +14,7 @@ class Sensor:
         return round(value, self.precision)
 
     def current_max_min(self, min, max, current):
+        step = (self.max - self.min) / 4
         base_gauge = go.Indicator(
                 mode="gauge+number",
                 value=current,
@@ -22,10 +23,10 @@ class Sensor:
                     "axis": {"range": [self.min, self.max]},
                     "bar": {"color": "black"},
                     "steps": [
-                        {"range": [0, 10], "color": "#f8f9fa"},
-                        {"range": [10, 20], "color": "#74b9ff"},
-                        {"range": [20, 30], "color": "#ffeaa7"},
-                        {"range": [30, 40], "color": "#d63031"},
+                        {"range": [0, step], "color": "#f8f9fa"},
+                        {"range": [step, step*2], "color": "#74b9ff"},
+                        {"range": [step*2, step*3], "color": "#ffeaa7"},
+                        {"range": [step*3, step*4], "color": "#d63031"},
                     ],
                     "threshold": {   # one threshold (current temp pointer)
                         "line": {"color": "black", "width": 4},
