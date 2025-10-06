@@ -1,8 +1,6 @@
 from sensors.sensor import Sensor
-from dash import dcc, Graph
+from dash import dcc
 import plotly.graph_objects as go
-from dash_daq import LEDDisplay
-from dash_dac import dcc
 
 class Temperature(Sensor):
     def __init__(self, device):
@@ -16,7 +14,7 @@ class Temperature(Sensor):
             return None
 
     def dashboard_gauge(self):
-        return Graph(
+        return dcc.Graph(
             id=self.key,
             figure=go.Figure(go.Indicator(
                 mode="gauge+number",
