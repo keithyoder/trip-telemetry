@@ -15,47 +15,62 @@ class Temperature(Sensor):
             return None
 
     def figure(self, min, max, current):
-        fig = go.Figure(go.Indicator(
-            mode="gauge+number",
-            value=current,
-            title={"text": "Room Temperature (°C)"},
-            gauge={
-                "axis": {"range": [0, 40], "tickwidth": 1, "tickcolor": "darkblue"},
-                "bar": {"color": "red"},
-                "steps": [
-                    {"range": [0, 10], "color": "#f8f9fa"},
-                    {"range": [10, 20], "color": "#74b9ff"},
-                    {"range": [20, 30], "color": "#ffeaa7"},
-                    {"range": [30, 40], "color": "#d63031"},
-                ],
-                "threshold": {
-                    "line": {"color": "black", "width": 4},
-                    "thickness": 0.75,
-                    "value": current
+        base_gauge = go.Indicator(
+                mode="gauge+number",
+                value=current,
+                title={"text": "Room Temperature (°C)"},
+                gauge={
+                    "axis": {"range": [0, 40]},
+                    "bar": {"color": "black"},
+                    "steps": [
+                        {"range": [0, 10], "color": "#f8f9fa"},
+                        {"range": [10, 20], "color": "#74b9ff"},
+                        {"range": [20, 30], "color": "#ffeaa7"},
+                        {"range": [30, 40], "color": "#d63031"},
+                    ],
+                    "threshold": {   # one threshold (current temp pointer)
+                        "line": {"color": "black", "width": 4},
+                        "thickness": 0.75,
+                        "value": current
+                    }
                 }
-            }
-        ))
-        for t in [{"value": min, "color": "black", "label": "Min"}, {"value": max, "color": "red", "label": "Max"}]:
-            fig.add_shape(
-                type="line",
-                x0=0.5, x1=0.5,  # center of gauge
-                y0=0, y1=1,      # spans the gauge
-                xref="paper", yref="paper",
-                line=dict(color=t["color"], width=3),
-                name=f"thr_{t['value']}"
             )
-            fig.add_annotation(
-                x=0.5, y=1.05, xref="paper", yref="paper",
-                text=f"{t['label']}: {t['value']}°C",
-                showarrow=False,
-                font=dict(color=t["color"], size=12)
+
+            # extra indicators with only threshold lines
+            min_threshold = go.Indicator(
+                mode="gauge",
+                value=min,
+                gauge={
+                    "axis": {"range": [0, 40]},
+                    "bar": {"color": "rgba(0,0,0,0)"},  # invisible bar
+                    "threshold": {
+                        "line": {"color": "green", "width": 4},
+                        "thickness": 0.75,
+                        "value": min
+                    }
+                },
+                domain={'x': [0, 1], 'y': [0, 1]}  # overlay exactly
             )
-        fig.update_layout(
-            height=200,  # increase height
-            width=300,   # increase width
-            margin=dict(l=40, r=40, t=60, b=40)
-        )
-        return fig
+
+            max_threshold = go.Indicator(
+                mode="gauge",
+                value=max,
+                gauge={
+                    "axis": {"range": [0, 40]},
+                    "bar": {"color": "rgba(0,0,0,0)"},
+                    "threshold": {
+                        "line": {"color": "red", "width": 4},
+                        "thickness": 0.75,
+                        "value": max
+                    }
+                },
+                domain={'x': [0, 1], 'y': [0, 1]}
+            )
+
+            fig = go.Figure([base_gauge, min_threshold, max_threshold])
+            fig.update_layout(height=400, width=500)
+
+            return fig
 
     def dashboard_gauge(self):
         return dcc.Graph(
