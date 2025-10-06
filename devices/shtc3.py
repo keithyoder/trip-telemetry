@@ -3,6 +3,7 @@ from board import I2C
 from devices.device import Device
 from sensors.shtc3.temperature import Temperature
 from sensors.shtc3.humidity import Humidity
+from sensors.shtc3.dew_point import DewPoint
 
 class SHTC3(Device):
     def __init__(self):
@@ -11,7 +12,8 @@ class SHTC3(Device):
         self.values = {}
         self.sensors = [
             Temperature(self.device),
-            Humidity(self.device)
+            Humidity(self.device),
+            DewPoint(self.device)
         ]
 
     def is_connected(self):
