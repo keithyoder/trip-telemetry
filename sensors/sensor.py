@@ -39,7 +39,7 @@ class Sensor:
         # extra indicators with only threshold lines
         min_threshold = go.Indicator(
             mode="gauge",
-            value=min,
+            value=daily_range['minReading']['value'],
             gauge={
                 "axis": {"range": [self.min, self.max], "visible": False},
                 "bar": {"color": "rgba(0,0,0,0)"},
@@ -48,7 +48,7 @@ class Sensor:
                 "threshold": {
                     "line": {"color": "green", "width": 4},
                     "thickness": 0.75,
-                    "value": float(daily_range['minReading']['value'])
+                    "value": daily_range['minReading']['value']
                 }
             },
             domain={'x': [0, 1], 'y': [0, 1]}  # overlay exactly
@@ -56,7 +56,7 @@ class Sensor:
 
         max_threshold = go.Indicator(
             mode="gauge",
-            value=max,
+            value=daily_range['maxReading']['value'],
             gauge={
                 "axis": {"range": [self.min, self.max], "visible": False},
                 "bar": {"color": "rgba(0,0,0,0)"},
@@ -65,7 +65,7 @@ class Sensor:
                 "threshold": {
                     "line": {"color": "yellow", "width": 4},
                     "thickness": 0.75,
-                    "value": float(daily_range['maxReading']['value'])
+                    "value": daily_range['maxReading']['value']
                 }
             },
             domain={'x': [0, 1], 'y': [0, 1]}
