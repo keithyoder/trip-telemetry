@@ -41,8 +41,10 @@ class Temperature(Sensor):
             mode="gauge",
             value=min,
             gauge={
-                "axis": {"range": [0, 40]},
-                "bar": {"color": "rgba(0,0,0,0)"},  # invisible bar
+                "axis": {"range": [0, 40], "visible": False},
+                "bar": {"color": "rgba(0,0,0,0)"},
+                "bgcolor": "rgba(0,0,0,0)",
+                "steps": [],
                 "threshold": {
                     "line": {"color": "green", "width": 4},
                     "thickness": 0.75,
@@ -56,8 +58,10 @@ class Temperature(Sensor):
             mode="gauge",
             value=max,
             gauge={
-                "axis": {"range": [0, 40]},
+                "axis": {"range": [0, 40], "visible": False},
                 "bar": {"color": "rgba(0,0,0,0)"},
+                "bgcolor": "rgba(0,0,0,0)",
+                "steps": [],
                 "threshold": {
                     "line": {"color": "red", "width": 4},
                     "thickness": 0.75,
