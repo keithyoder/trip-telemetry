@@ -63,7 +63,7 @@ class Temperature(Sensor):
                 "bgcolor": "rgba(0,0,0,0)",
                 "steps": [],
                 "threshold": {
-                    "line": {"color": "yello", "width": 4},
+                    "line": {"color": "yellow", "width": 4},
                     "thickness": 0.75,
                     "value": max
                 }
