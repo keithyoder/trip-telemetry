@@ -1,5 +1,4 @@
 import plotly.graph_objects as go
-from zoneinfo import ZoneInfo
 from datetime import timezone
 
 class Sensor:
@@ -14,6 +13,9 @@ class Sensor:
         
     def value(self, value):
         return round(value, self.precision)
+
+    def format_time(self, timestamp):
+        return timestamp.replace(tzinfo=timezone.utc).astimezone().strftime('%H:%M')
 
     def current_max_min(self, current, daily_range):
         step = (self.max - self.min) / 4
@@ -76,14 +78,14 @@ class Sensor:
         fig = go.Figure([base_gauge, min_threshold, max_threshold])
         fig.add_annotation(
             x=0.5, y=-0.2, xref="paper", yref="paper",
-            text=f"Min: {daily_range['minReading']['value']:.1f} {self.unit} at {daily_range['minReading']['time'].replace(tzinfo=timezone.utc).astimezone().strftime('%H:%M')}",
+            text=f"Min: {daily_range['minReading']['value']:.1f}{self.unit} at {self.format_time(daily_range['minReading']['time'])}",
             showarrow=False,
             font=dict(size=14, color="green")
         )
 
         fig.add_annotation(
-            x=0.5, y=-0.3, xref="paper", yref="paper",
-            text=f"Max: {daily_range['maxReading']['value']:.1f} {self.unit} at {daily_range['maxReading']['time'].replace(tzinfo=timezone.utc).astimezone().strftime('%H:%M')}",
+            x=0.5, y=-0.35, xref="paper", yref="paper",
+            text=f"Max: {daily_range['maxReading']['value']:.1f}{self.unit} at {self.format_time(daily_range['maxReading']['time'])}",
             showarrow=False,
             font=dict(size=14, color="red")
         )

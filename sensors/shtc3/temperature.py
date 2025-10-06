@@ -4,6 +4,7 @@ from dash import dcc
 class Temperature(Sensor):
     def __init__(self, device):
         super().__init__(device, "shtc3_temperature", "C")
+        self.description = "Temperature"
         self.min = 0
         self.max = 40
 
