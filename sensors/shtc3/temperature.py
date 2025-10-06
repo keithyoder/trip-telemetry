@@ -18,30 +18,33 @@ class Temperature(Sensor):
         return go.Figure(go.Indicator(
             mode="gauge+number",
             value=current,
-            title={'text': "Temperature Today"},
+            title={"text": "Room Temperature (°C)"},
             gauge={
-                'axis': {'range': [min - 1, max + 1]},
-                'bar': {'color': "red"},
-                'steps': [
-                    {'range': [min, max], 'color': "lightblue"}
+                "axis": {"range": [0, 40], "tickwidth": 1, "tickcolor": "darkblue"},
+                "bar": {"color": "red"},
+                "steps": [
+                    {"range": [0, 10], "color": "#f8f9fa"},
+                    {"range": [10, 20], "color": "#74b9ff"},
+                    {"range": [20, 30], "color": "#ffeaa7"},
+                    {"range": [30, 40], "color": "#d63031"},
                 ],
-                'threshold': {
-                    'line': {'color': "black", 'width': 4},
-                    'thickness': 0.75,
-                    'value': current
+                "threshold": {
+                    "line": {"color": "black", "width": 4},
+                    "thickness": 0.75,
+                    "value": current
                 }
             }
         ))
 
     def dashboard_gauge(self):
-        # return dcc.Graph(
-        #     id=self.key
-        # )
-        return GraduatedBar(
-            id=self.key,
-            color={"gradient":True,"ranges":{"blue":[0,15],"yellow":[15,30],"red":[30,40]}},
-            showCurrentValue=True,
-            step=0.5,
-            max=40,
-            value=25
+        return dcc.Graph(
+            id=self.key
         )
+        # return GraduatedBar(
+        #     id=self.key,
+        #     color={"gradient":True,"ranges":{"blue":[0,15],"yellow":[15,30],"red":[30,40]}},
+        #     showCurrentValue=True,
+        #     step=0.5,
+        #     max=40,
+        #     value=25
+        # )

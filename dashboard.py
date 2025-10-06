@@ -47,7 +47,7 @@ app.layout = html.Div(
 
 @callback(
     [
-        Output('shtc3_temperature', 'value'),
+        Output('shtc3_temperature', 'figure'),
         Output('bmp581_pressure', 'value'),
         Output('ltr390_ambient_light', 'value'),
     ],
@@ -70,7 +70,7 @@ def update_output(n):
     else:
         light = f"{values['ltr390_lux']:.0f}"
 
-    return [values.get("shtc3_temperature", 0), pressure, light]
+    return [figure, pressure, light]
 
 def read_sensors():
     while True:
