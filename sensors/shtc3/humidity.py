@@ -1,5 +1,5 @@
 from sensors.sensor import Sensor
-from dash_daq import LEDDisplay
+from dash import dcc
 
 class Humidity(Sensor):
     def __init__(self, device):
@@ -12,9 +12,10 @@ class Humidity(Sensor):
         except:
             return None
 
+    def figure(self, min, max, current):
+        return super().current_max_min(max, min, current)
+
     def dashboard_gauge(self):
-        return LEDDisplay(
-            id=self.key,
-            label="Relative Humidity (%)",
-            value=26.5
+        return dcc.Graph(
+            id=self.key
         )

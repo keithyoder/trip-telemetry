@@ -37,6 +37,7 @@ app.layout = html.Div(
         bmp581.sensor("bmp581_pressure").dashboard_gauge(),
         ltr390.sensor("ltr390_ambient_light").dashboard_gauge(),
         shtc3.sensor("shtc3_temperature").dashboard_gauge(),
+        shtc3.sensor("shtc3_humidity").dashboard_gauge(),
         dcc.Interval(
             id='interval-component',
             interval=1*1000, # in milliseconds
@@ -50,6 +51,7 @@ app.layout = html.Div(
         Output('shtc3_temperature', 'figure'),
         Output('bmp581_pressure', 'value'),
         Output('ltr390_ambient_light', 'value'),
+        Output('shtc3_humidity', 'figure'),
     ],
     Input('interval-component', 'n_intervals')
 )
@@ -59,6 +61,11 @@ def update_output(n):
         min=temperature_today[0]['minReading']['value'],
         max=temperature_today[0]['maxReading']['value'],
         current=values.get("shtc3_temperature", 0)
+    )
+    humidity = shtc3.sensor("shtc3_humidity").figure(
+        min=temperature_today[0]['minReading']['value'],
+        max=temperature_today[0]['maxReading']['value'],
+        current=values.get("shtc3_humidity", 0)
     )
     if 'bmp581_pressure' not in values:    
         pressure = '0' 
@@ -70,7 +77,7 @@ def update_output(n):
     else:
         light = f"{values['ltr390_lux']:.0f}"
 
-    return [figure, pressure, light]
+    return [figure, pressure, light, humidity]
 
 def read_sensors():
     while True:
