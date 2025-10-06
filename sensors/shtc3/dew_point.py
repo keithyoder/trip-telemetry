@@ -10,7 +10,7 @@ class DewPoint(Sensor):
     def value(self):
         try:
             temperature, humidity = self.device.measurements
-            dew_point = 243.04*(((17.625*temperature)/(243.04+temperature))-log(humidity/100)) / (17.625+log(humidity/100)-((17.625*temperature)/(243.04+temperature)))
+            dew_point = 243.04*(log(humidity/100)+((17.625*temperature)/(243.04+temperature)))/(17.625-log(humidity/100)-((17.625*temperature)/(243.04+temperature)))
             return super().value(dew_point)
         except:
             return None
