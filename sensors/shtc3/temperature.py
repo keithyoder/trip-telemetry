@@ -35,7 +35,7 @@ class Temperature(Sensor):
                 }
             }
         ))
-        for t in [min, max]:
+        for t in [{"value": min, "color": "black"}, {"value": max, "color": "red"}]:
             fig.add_shape(
                 type="line",
                 x0=0.5, x1=0.5,  # center of gauge
