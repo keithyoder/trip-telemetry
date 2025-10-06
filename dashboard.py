@@ -36,7 +36,7 @@ app.layout = html.Div(
     children=[
         bmp581.sensor("bmp581_pressure").dashboard_gauge(),
         ltr390.sensor("ltr390_ambient_light").dashboard_gauge(),
-        bmp581.sensor("bmp581_temperature").dashboard_gauge(),
+        shtc3.sensor("shtc3_temperature").dashboard_gauge(),
         dcc.Interval(
             id='interval-component',
             interval=1*1000, # in milliseconds
@@ -47,7 +47,7 @@ app.layout = html.Div(
 
 @callback(
     [
-        Output('bmp581_temperature', 'value'),
+        Output('shtc3_temperature', 'value'),
         Output('bmp581_pressure', 'value'),
         Output('ltr390_ambient_light', 'value'),
     ],

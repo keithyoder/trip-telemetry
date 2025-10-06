@@ -1,5 +1,8 @@
 from sensors.sensor import Sensor
+from dash import dcc, Graph
+import plotly.graph_objects as go
 from dash_daq import LEDDisplay
+from dash_dac import dcc
 
 class Temperature(Sensor):
     def __init__(self, device):
@@ -13,8 +16,23 @@ class Temperature(Sensor):
             return None
 
     def dashboard_gauge(self):
-        return LEDDisplay(
+        return Graph(
             id=self.key,
-            label="Temperature (C)",
-            value=26.5
+            figure=go.Figure(go.Indicator(
+                mode="gauge+number",
+                value=20.0,
+                title={'text': "Temperature Today"},
+                gauge={
+                    'axis': {'range': [19 - 1, 28 + 1]},
+                    'bar': {'color': "red"},
+                    'steps': [
+                        {'range': [19, 28], 'color': "lightblue"}
+                    ],
+                    'threshold': {
+                        'line': {'color': "black", 'width': 4},
+                        'thickness': 0.75,
+                        'value': 20.0
+                    }
+                }
+            ))
         )
