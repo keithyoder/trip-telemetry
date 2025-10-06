@@ -77,14 +77,14 @@ class Sensor:
         fig = go.Figure([base_gauge, min_threshold, max_threshold])
         fig.add_annotation(
             x=0.5, y=-0.2, xref="paper", yref="paper",
-            text=f"Min: {daily_range['minReading']['value']:.1f} {self.unit} at {daily_range['minReading']['time'].astimezone(self.local_tz).strftime('%H:%M')}",
+            text=f"Min: {daily_range['minReading']['value']:.1f} {self.unit} at {daily_range['minReading']['time'].astimezone().strftime('%H:%M')}",
             showarrow=False,
             font=dict(size=14, color="green")
         )
 
         fig.add_annotation(
             x=0.5, y=-0.3, xref="paper", yref="paper",
-            text=f"Max: {daily_range['maxReading']['value']:.1f} {self.unit} at {daily_range['maxReading']['time'].astimezone(self.local_tz).strftime('%H:%M')}",
+            text=f"Max: {daily_range['maxReading']['value']:.1f} {self.unit} at {daily_range['maxReading']['time'].astimezone().strftime('%H:%M')}",
             showarrow=False,
             font=dict(size=14, color="red")
         )
