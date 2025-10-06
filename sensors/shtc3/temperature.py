@@ -36,41 +36,41 @@ class Temperature(Sensor):
                 }
             )
 
-            # extra indicators with only threshold lines
-            min_threshold = go.Indicator(
-                mode="gauge",
-                value=min,
-                gauge={
-                    "axis": {"range": [0, 40]},
-                    "bar": {"color": "rgba(0,0,0,0)"},  # invisible bar
-                    "threshold": {
-                        "line": {"color": "green", "width": 4},
-                        "thickness": 0.75,
-                        "value": min
-                    }
-                },
-                domain={'x': [0, 1], 'y': [0, 1]}  # overlay exactly
-            )
+        # extra indicators with only threshold lines
+        min_threshold = go.Indicator(
+            mode="gauge",
+            value=min,
+            gauge={
+                "axis": {"range": [0, 40]},
+                "bar": {"color": "rgba(0,0,0,0)"},  # invisible bar
+                "threshold": {
+                    "line": {"color": "green", "width": 4},
+                    "thickness": 0.75,
+                    "value": min
+                }
+            },
+            domain={'x': [0, 1], 'y': [0, 1]}  # overlay exactly
+        )
 
-            max_threshold = go.Indicator(
-                mode="gauge",
-                value=max,
-                gauge={
-                    "axis": {"range": [0, 40]},
-                    "bar": {"color": "rgba(0,0,0,0)"},
-                    "threshold": {
-                        "line": {"color": "red", "width": 4},
-                        "thickness": 0.75,
-                        "value": max
-                    }
-                },
-                domain={'x': [0, 1], 'y': [0, 1]}
-            )
+        max_threshold = go.Indicator(
+            mode="gauge",
+            value=max,
+            gauge={
+                "axis": {"range": [0, 40]},
+                "bar": {"color": "rgba(0,0,0,0)"},
+                "threshold": {
+                    "line": {"color": "red", "width": 4},
+                    "thickness": 0.75,
+                    "value": max
+                }
+            },
+            domain={'x': [0, 1], 'y': [0, 1]}
+        )
 
-            fig = go.Figure([base_gauge, min_threshold, max_threshold])
-            fig.update_layout(height=400, width=500)
+        fig = go.Figure([base_gauge, min_threshold, max_threshold])
+        fig.update_layout(height=400, width=500)
 
-            return fig
+        return fig
 
     def dashboard_gauge(self):
         return dcc.Graph(
