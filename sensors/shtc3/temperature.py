@@ -1,7 +1,7 @@
 from sensors.sensor import Sensor
 from dash import dcc
 import plotly.graph_objects as go
-from dash_dac import GraduatedBar
+from dash_daq import GraduatedBar
 
 class Temperature(Sensor):
     def __init__(self, device):
