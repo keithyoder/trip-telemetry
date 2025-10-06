@@ -48,7 +48,7 @@ class Sensor:
                 "threshold": {
                     "line": {"color": "green", "width": 4},
                     "thickness": 0.75,
-                    "value": daily_range['minReading']['value']
+                    "value": float(daily_range['minReading']['value'])
                 }
             },
             domain={'x': [0, 1], 'y': [0, 1]}  # overlay exactly
@@ -65,7 +65,7 @@ class Sensor:
                 "threshold": {
                     "line": {"color": "yellow", "width": 4},
                     "thickness": 0.75,
-                    "value": daily_range['maxReading']['value']
+                    "value": float(daily_range['maxReading']['value'])
                 }
             },
             domain={'x': [0, 1], 'y': [0, 1]}
