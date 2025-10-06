@@ -3,7 +3,7 @@ from dash import dcc
 
 class Humidity(Sensor):
     def __init__(self, device):
-        super().__init__(device, "shtc3_humidity", "C", precision=1)
+        super().__init__(device, "shtc3_humidity", "%", precision=1)
 
     def value(self):
         try:
