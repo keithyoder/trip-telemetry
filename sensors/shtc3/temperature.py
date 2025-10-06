@@ -13,24 +13,26 @@ class Temperature(Sensor):
         except:
             return None
 
+    def figure(self, min, max, current):
+        return go.Figure(go.Indicator(
+            mode="gauge+number",
+            value=current,
+            title={'text': "Temperature Today"},
+            gauge={
+                'axis': {'range': [min - 1, max + 1]},
+                'bar': {'color': "red"},
+                'steps': [
+                    {'range': [min, max], 'color': "lightblue"}
+                ],
+                'threshold': {
+                    'line': {'color': "black", 'width': 4},
+                    'thickness': 0.75,
+                    'value': current
+                }
+            }
+        ))
+
     def dashboard_gauge(self):
         return dcc.Graph(
-            id=self.key,
-            figure=go.Figure(go.Indicator(
-                mode="gauge+number",
-                value=20.0,
-                title={'text': "Temperature Today"},
-                gauge={
-                    'axis': {'range': [19 - 1, 28 + 1]},
-                    'bar': {'color': "red"},
-                    'steps': [
-                        {'range': [19, 28], 'color': "lightblue"}
-                    ],
-                    'threshold': {
-                        'line': {'color': "black", 'width': 4},
-                        'thickness': 0.75,
-                        'value': 20.0
-                    }
-                }
-            ))
+            id=self.key
         )

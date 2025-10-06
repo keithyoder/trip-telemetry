@@ -47,18 +47,19 @@ app.layout = html.Div(
 
 @callback(
     [
-        Output('shtc3_temperature', 'value'),
+        Output('shtc3_temperature', 'figure'),
         Output('bmp581_pressure', 'value'),
         Output('ltr390_ambient_light', 'value'),
     ],
     Input('interval-component', 'n_intervals')
 )
 def update_output(n):
-    if 'shtc3_temperature' not in values:
-        temperature = '0' 
-    else:
-        temperature = f"{values['shtc3_temperature']:.1f}"
-
+    temperature_today = logger.daily_max_min("shtc3_temperature")
+    figure = shtc3.sensor("shtc3_temperature").figure(
+        min=temperature_today,
+        max=temperature_today,
+        current=values.get("shtc3_temperature", 0)
+    )
     if 'bmp581_pressure' not in values:    
         pressure = '0' 
     else:
@@ -69,7 +70,7 @@ def update_output(n):
     else:
         light = f"{values['ltr390_lux']:.0f}"
 
-    return [float(temperature), pressure, light]
+    return [figure, pressure, light]
 
 def read_sensors():
     while True:
