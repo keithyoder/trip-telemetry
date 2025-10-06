@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+from datetime import datetime, timedelta
 
 class MongoDBLogger:
     def __init__(self):
@@ -34,6 +35,49 @@ class MongoDBLogger:
             },
             {
                 '$sort': {'_id': 1}
+            }
+        ]
+        return list(self.collection.aggregate(pipeline))
+    
+    def daily_max_min(self, key):
+        today_start = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        tomorrow_start = today_start + timedelta(days=1)
+        pipeline = [
+            {
+                '$addFields': {
+                    'ts': { '$toDate': "$timestamp" }
+                }
+            },
+            {
+                "$match": {
+                    "ts": {
+                        "$gte": today_start,
+                        "$lt": tomorrow_start
+                    }
+                }
+            },
+            {
+                "$group": {
+                    "_id": None,
+                    "maxReading": {
+                        "$top": {
+                            "sortBy": {"shtc3_temperature": -1},
+                            "output": {
+                                "value": "$shtc3_temperature",
+                                "time": "$timestamp"
+                            }
+                        }
+                    },
+                    "minReading": {
+                        "$top": {
+                            "sortBy": {"shtc3_temperature": 1},
+                            "output": {
+                                "value": "$shtc3_temperature",
+                                "time": "$timestamp"
+                            }
+                        }
+                    }
+                }
             }
         ]
         return list(self.collection.aggregate(pipeline))

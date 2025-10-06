@@ -6,6 +6,6 @@ class Speed(Sensor):
 
     def value(self):
         try:
-            return super().value(self.device.report.speed)
+            return super().value(self.device.report.hspeed)
         except:
             return None
