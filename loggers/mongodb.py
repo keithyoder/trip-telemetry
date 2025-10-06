@@ -63,7 +63,8 @@ class MongoDBLogger:
                     "ts": {
                         "$gte": self.today_start(),
                         "$lt": self.tomorrow_start()
-                    }
+                    },
+                    key: {"$ne": None}   # <- exclude nulls
                 }
             },
             {
