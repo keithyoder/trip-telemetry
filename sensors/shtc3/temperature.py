@@ -33,16 +33,6 @@ class Temperature(Sensor):
                     "thickness": 0.75,
                     "value": current
                 }
-                "threshold": {
-                    "line": {"color": "black", "width": 4},
-                    "thickness": 0.75,
-                    "value": current
-                }
-                "threshold": {
-                    "line": {"color": "black", "width": 4},
-                    "thickness": 0.75,
-                    "value": current
-                }
             }
         ))
         for t in [min, max]:
