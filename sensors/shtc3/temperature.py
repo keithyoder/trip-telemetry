@@ -1,6 +1,7 @@
 from sensors.sensor import Sensor
 from dash import dcc
 import plotly.graph_objects as go
+from dash_dac import GraduatedBar
 
 class Temperature(Sensor):
     def __init__(self, device):
@@ -33,6 +34,13 @@ class Temperature(Sensor):
         ))
 
     def dashboard_gauge(self):
-        return dcc.Graph(
-            id=self.key
+        # return dcc.Graph(
+        #     id=self.key
+        # )
+        return GraduatedBar(
+            color={"gradient":True,"ranges":{"blue":[0,15],"yellow":[15,30],"red":[30,40]}},
+            showCurrentValue=True,
+            step=0.5,
+            max=40,
+            value=25
         )

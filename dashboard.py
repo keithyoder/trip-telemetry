@@ -70,7 +70,7 @@ def update_output(n):
     else:
         light = f"{values['ltr390_lux']:.0f}"
 
-    return [figure, pressure, light]
+    return [values.get("shtc3_temperature", 0), pressure, light]
 
 def read_sensors():
     while True:
