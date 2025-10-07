@@ -189,7 +189,7 @@ class TripDetector:
         filename = f"trip_{trip_id}_{start_time}.kml"
 
         df = pd.DataFrame(trip['points'])
-        line = LineString(zip(df["longitude"], df["latitude"]))
+        line = LineString(zip(df["gps_longitude"], df["gps_latitude"]))
         gdf_line = GeoDataFrame(
             pd.DataFrame([{"id": 1}]),
             geometry=[line],
