@@ -2,11 +2,15 @@ from pymongo import MongoClient
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
+def MongoClient():
+    client = MongoClient('localhost', 27017)
+    db = client['pi_i2c_logger']
+    collection = db['logs']
+    return client, db, collection
+
 class MongoDBLogger:
     def __init__(self):
-        self.client = MongoClient('localhost', 27017)
-        self.db = self.client['pi_i2c_logger']
-        self.collection = self.db['logs']
+        self.client, self.db, self.collection = MongoClient()
         self.local_tz = datetime.now().astimezone().tzinfo
 
     def today_start(self):

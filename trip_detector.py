@@ -6,13 +6,12 @@ import os
 import pandas as pd
 from geopandas import GeoDataFrame
 from shapely.geometry import LineString, Point
+from loggers.mongodb import MongoClient
 
 class TripDetector:
-    def __init__(self, mongo_uri: str, database: str, collection: str):
+    def __init__(self):
         """Initialize connection to MongoDB"""
-        self.client = MongoClient(mongo_uri)
-        self.db = self.client[database]
-        self.collection = self.db[collection]
+        self.client, self.db, self.collection = MongoClient()
     
     def haversine_distance(self, lat1: float, lon1: float, lat2: float, lon2: float) -> float:
         """Calculate distance between two GPS coordinates in meters"""
