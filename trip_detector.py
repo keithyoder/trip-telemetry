@@ -3,6 +3,9 @@ from datetime import datetime, timedelta
 from typing import List, Dict
 import math
 import os
+import pandas as pd
+from geopandas import GeoDataFrame
+from shapely.geometry import LineString, Point
 
 class TripDetector:
     def __init__(self, mongo_uri: str, database: str, collection: str):
@@ -184,76 +187,17 @@ class TripDetector:
         trip_id = trip['trip_id']
         start_time = trip['start_time'].strftime('%Y%m%d_%H%M%S')
         filename = f"trip_{trip_id}_{start_time}.kml"
+
+        df = pd.DataFrame(trip['points'])
+        line = LineString(zip(df["longitude"], df["latitude"]))
+        gdf_line = GeoDataFrame(
+            pd.DataFrame([{"id": 1}]),
+            geometry=[line],
+            crs="EPSG:4326"
+        )
         filepath = os.path.join(output_dir, filename)
-        
-        # Build coordinates string
-        coordinates = []
-        for point in trip['points']:
-            lat = point['gps_latitude']
-            lon = point['gps_longitude']
-            alt = point.get('gps_altitude', 0)  # Use 0 if altitude not available
-            coordinates.append(f"{lon},{lat},{alt}")
-        
-        coords_str = "\n              ".join(coordinates)
-        
-        # KML template
-        kml_content = f"""<?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://www.opengis.net/kml/2.2">
-  <Document>
-    <name>Trip {trip_id}</name>
-    <description>
-      Start: {trip['start_time'].strftime('%Y-%m-%d %H:%M:%S')}
-      End: {trip['end_time'].strftime('%Y-%m-%d %H:%M:%S')}
-      Duration: {trip['duration_seconds'] / 60:.1f} minutes
-      Distance: {trip['total_distance_meters'] / 1000:.2f} km
-      Max Speed: {trip['max_speed_ms'] * 3.6:.1f} km/h
-    </description>
-    
-    <Style id="tripLineStyle">
-      <LineStyle>
-        <color>ff0000ff</color>
-        <width>3</width>
-      </LineStyle>
-    </Style>
-    
-    <Placemark>
-      <name>Trip {trip_id} Track</name>
-      <description>GPS track with {trip['point_count']} points</description>
-      <styleUrl>#tripLineStyle</styleUrl>
-      <LineString>
-        <extrude>0</extrude>
-        <tessellate>1</tessellate>
-        <altitudeMode>clampToGround</altitudeMode>
-        <coordinates>
-              {coords_str}
-        </coordinates>
-      </LineString>
-    </Placemark>
-    
-    <Placemark>
-      <name>Start</name>
-      <description>{trip['start_time'].strftime('%Y-%m-%d %H:%M:%S')}</description>
-      <Point>
-        <coordinates>{trip['start_location']['lon']},{trip['start_location']['lat']},0</coordinates>
-      </Point>
-    </Placemark>
-    
-    <Placemark>
-      <name>End</name>
-      <description>{trip['end_time'].strftime('%Y-%m-%d %H:%M:%S')}</description>
-      <Point>
-        <coordinates>{trip['end_location']['lon']},{trip['end_location']['lat']},0</coordinates>
-      </Point>
-    </Placemark>
-    
-  </Document>
-</kml>"""
-        
-        with open(filepath, 'w', encoding='utf-8') as f:
-            f.write(kml_content)
-        
-        return filepath
-    
+        gdf_line.to_file(filepath, driver="KML")
+
     
     def export_all_trips_to_kml(self, trips: List[Dict], output_dir: str = "trips") -> List[str]:
         """
