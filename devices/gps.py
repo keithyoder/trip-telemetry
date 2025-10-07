@@ -4,6 +4,7 @@ from sensors.gps.latitude import Latitude
 from sensors.gps.longitude import Longitude
 from sensors.gps.altitude import Altitude
 from sensors.gps.speed import Speed
+from solar_position import SolarPosition
 
 class GPS(Device):
     def __init__(self):
@@ -23,5 +24,15 @@ class GPS(Device):
         self.report = gpsd.get_current()
         super().read()
 
+    def solar_position(self):
+        if not self.report:
+            return None
+        coords = {
+            'latitude': self.report.lat,
+            'longitude': self.report.lon
+        }
+        sp = SolarPosition(self.report.get_time(), coords, timezone="America/Recife")
+        return sp
+    
     def is_connected(self):
         return True
