@@ -8,3 +8,4 @@ dash_daq==0.6.0
 pymongo==4.15.2
 gpsd-py3==0.3.0
 pytz==2025.2
+geopandas==1.1.1
