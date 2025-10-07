@@ -1,9 +1,9 @@
-from pymongo import MongoClient
+import pymongo
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
 def MongoClient():
-    client = MongoClient('localhost', 27017)
+    client = pymongo.MongoClient('localhost', 27017)
     db = client['pi_i2c_logger']
     collection = db['logs']
     return client, db, collection
