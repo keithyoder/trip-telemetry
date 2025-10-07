@@ -1,6 +1,5 @@
 import pymongo
-from datetime import datetime, timedelta
-from zoneinfo import ZoneInfo
+from helpers.today import Today
 
 def MongoClient():
     client = pymongo.MongoClient('localhost', 27017)
@@ -11,17 +10,6 @@ def MongoClient():
 class MongoDBLogger:
     def __init__(self):
         self.client, self.db, self.collection = MongoClient()
-        self.local_tz = datetime.now().astimezone().tzinfo
-
-    def today_start(self):
-        local_midnight = datetime.now(self.local_tz).replace(hour=0, minute=0, second=0, microsecond=0)
-
-        # Convert to UTC
-        return local_midnight.astimezone(ZoneInfo("UTC"))
-    
-    def tomorrow_start(self):
-        local_midnight = datetime.now(self.local_tz).replace(hour=0, minute=0, second=0, microsecond=0)
-        return (local_midnight + timedelta(days=1)).astimezone(ZoneInfo("UTC"))
 
     def close(self):
         self.client.close()
@@ -65,8 +53,8 @@ class MongoDBLogger:
             {
                 "$match": {
                     "ts": {
-                        "$gte": self.today_start(),
-                        "$lt": self.tomorrow_start()
+                        "$gte": Today.start(),
+                        "$lt": Today.end()
                     },
                     key: {"$ne": None}   # <- exclude nulls
                 }

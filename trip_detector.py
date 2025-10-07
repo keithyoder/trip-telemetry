@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import List, Dict
 import math
 import os
@@ -7,6 +7,7 @@ import pandas as pd
 from geopandas import GeoDataFrame
 from shapely.geometry import LineString, Point
 from loggers.mongodb import MongoClient
+from helpers.today import Today
 
 class TripDetector:
     def __init__(self):
@@ -27,6 +28,10 @@ class TripDetector:
         
         return R * c
     
+    def todays_trips(self) -> List[Dict]:
+        """Detect trips for the current day"""
+        return self.detect_trips(start_date=Today.start(), end_date=Today.end())
+
     def detect_trips(self, 
                      start_date: datetime = None,
                      end_date: datetime = None,
