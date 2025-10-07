@@ -189,9 +189,9 @@ class TripDetector:
         # Build coordinates string
         coordinates = []
         for point in trip['points']:
-            lat = point['latitude']
-            lon = point['longitude']
-            alt = point.get('altitude', 0)  # Use 0 if altitude not available
+            lat = point['gps_latitude']
+            lon = point['gps_longitude']
+            alt = point.get('gps_altitude', 0)  # Use 0 if altitude not available
             coordinates.append(f"{lon},{lat},{alt}")
         
         coords_str = "\n              ".join(coordinates)
