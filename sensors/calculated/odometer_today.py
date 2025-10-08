@@ -19,7 +19,7 @@ class OdometerToday(Sensor):
         return LEDDisplay(
             id=self.key,
             label="Total Distance Today (km)",
-            value=" 0.0",
+            value="0.0",
             color="#FFFFFF",  # White numbers
             backgroundColor="#000000",  # Black background
             size=20,  # Adjust size as needed
