@@ -10,6 +10,7 @@ from devices.usb_obd import USBOBD
 from devices.shtc3 import SHTC3
 from devices.gps import GPS
 from loggers.mongodb import MongoDBLogger
+from sensors.calculated.odometer_today import OdometerToday
 
 LOG_FILE = "dashboard_log.json"
 
@@ -18,6 +19,7 @@ ltr390 = LTR390()
 shtc3 = SHTC3()
 usb_gps = GPS()
 usb_odb = USBOBD('/dev/tty.usbserial-1130')
+odometer_today = OdometerToday()
 
 devices = [bmp581, ltr390, usb_odb, shtc3, usb_gps]
 values = {}
@@ -38,6 +40,7 @@ app.layout = html.Div(
         ltr390.sensor("ltr390_ambient_light").dashboard_gauge(),
         shtc3.sensor("shtc3_temperature").dashboard_gauge(),
         shtc3.sensor("shtc3_humidity").dashboard_gauge(),
+        odometer_today.dashboard_gauge(),
         dcc.Interval(
             id='interval-component',
             interval=1*1000, # in milliseconds
@@ -52,9 +55,11 @@ app.layout = html.Div(
         Output('bmp581_pressure', 'value'),
         Output('ltr390_ambient_light', 'value'),
         Output('shtc3_humidity', 'figure'),
+        Output('odometer_today', 'figure'),
     ],
     Input('interval-component', 'n_intervals')
 )
+
 def update_output(n):
     figure = shtc3.sensor("shtc3_temperature").figure(
         current=values.get("shtc3_temperature", 0),
@@ -74,7 +79,7 @@ def update_output(n):
     else:
         light = f"{values['ltr390_lux']:.0f}"
 
-    return [figure, pressure, light, humidity]
+    return [figure, pressure, light, humidity, odometer_today.value() or 0.0]
 
 def read_sensors():
     while True:
