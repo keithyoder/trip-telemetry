@@ -142,7 +142,7 @@ class TripDetector:
                     current_trip['max_speed'] = max(current_trip['max_speed'], speed)
                     current_trip['points'].append(log)
             
-            last_log_time = timestamp
+                last_log_time = timestamp
         
         # Handle ongoing trip at end of data
         if current_trip is not None:
