@@ -67,7 +67,7 @@ class TripDetector:
         
         trips = []
         current_trip = None
-        last_moving_time = None
+        last_log_time = None
         
         for i, log in enumerate(logs):
             lat = log.get('gps_latitude')
@@ -77,6 +77,39 @@ class TripDetector:
             
             if lat is None or lon is None:
                 continue
+            
+            # Check for time gap between logs
+            if current_trip is not None and last_log_time is not None:
+                time_gap = (timestamp - last_log_time).total_seconds()
+                
+                if time_gap > max_stop_duration:
+                    # End current trip due to data gap
+                    trip_duration = (current_trip['end_time'] - current_trip['start_time']).total_seconds()
+                    
+                    # Validate trip
+                    if (current_trip['total_distance'] >= min_trip_distance and 
+                        trip_duration >= min_trip_duration):
+                        
+                        trips.append({
+                            'trip_id': len(trips) + 1,
+                            'start_time': current_trip['start_time'],
+                            'end_time': current_trip['end_time'],
+                            'duration_seconds': trip_duration,
+                            'start_location': {
+                                'lat': current_trip['start_lat'],
+                                'lon': current_trip['start_lon']
+                            },
+                            'end_location': {
+                                'lat': current_trip['end_lat'],
+                                'lon': current_trip['end_lon']
+                            },
+                            'total_distance_meters': current_trip['total_distance'],
+                            'max_speed_ms': current_trip['max_speed'],
+                            'point_count': len(current_trip['points']),
+                            'points': current_trip['points']
+                        })
+                    
+                    current_trip = None
             
             is_moving = speed >= min_speed
             
@@ -108,43 +141,8 @@ class TripDetector:
                     current_trip['end_lon'] = lon
                     current_trip['max_speed'] = max(current_trip['max_speed'], speed)
                     current_trip['points'].append(log)
-                
-                last_moving_time = timestamp
             
-            else:
-                # Vehicle stopped
-                if current_trip is not None and last_moving_time is not None:
-                    stop_duration = (timestamp - last_moving_time).total_seconds()
-                    
-                    if stop_duration > max_stop_duration:
-                        # End current trip
-                        trip_duration = (current_trip['end_time'] - current_trip['start_time']).total_seconds()
-                        
-                        # Validate trip
-                        if (current_trip['total_distance'] >= min_trip_distance and 
-                            trip_duration >= min_trip_duration):
-                            
-                            trips.append({
-                                'trip_id': len(trips) + 1,
-                                'start_time': current_trip['start_time'],
-                                'end_time': current_trip['end_time'],
-                                'duration_seconds': trip_duration,
-                                'start_location': {
-                                    'lat': current_trip['start_lat'],
-                                    'lon': current_trip['start_lon']
-                                },
-                                'end_location': {
-                                    'lat': current_trip['end_lat'],
-                                    'lon': current_trip['end_lon']
-                                },
-                                'total_distance_meters': current_trip['total_distance'],
-                                'max_speed_ms': current_trip['max_speed'],
-                                'point_count': len(current_trip['points']),
-                                'points': current_trip['points']
-                            })
-                        
-                        current_trip = None
-                        last_moving_time = None
+            last_log_time = timestamp
         
         # Handle ongoing trip at end of data
         if current_trip is not None:
