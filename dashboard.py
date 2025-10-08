@@ -78,7 +78,7 @@ def update_output(n):
 
 def read_sensors():
     while True:
-        values["timestamp"] = usb_gps.values.get("gps_timestamp", datetime.now(UTC).replace(microsecond=0))
+        values["timestamp"] = values.get("gps_timestamp", datetime.now(UTC).replace(microsecond=0))
         for device in devices:
             if device.is_connected():
                 device.read()
