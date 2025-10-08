@@ -12,6 +12,8 @@ class Sensor:
         self.precision = precision
         
     def value(self, value):
+        if self.precision < 0 or value is None:
+            return value
         return round(value, self.precision)
 
     def format_time(self, timestamp):

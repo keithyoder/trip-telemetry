@@ -4,6 +4,7 @@ from sensors.gps.latitude import Latitude
 from sensors.gps.longitude import Longitude
 from sensors.gps.altitude import Altitude
 from sensors.gps.speed import Speed
+from sensors.gps.time import Time
 from helpers.solar_position import SolarPosition
 
 class GPS(Device):
@@ -14,6 +15,7 @@ class GPS(Device):
         self.report = None
         self.device = None
         self.sensors = [
+            Time(self),
             Latitude(self),
             Longitude(self),
             Altitude(self),
