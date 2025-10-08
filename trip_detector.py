@@ -36,7 +36,7 @@ class TripDetector:
                      start_date: datetime = None,
                      end_date: datetime = None,
                      min_speed: float = 1.0,  # m/s (~3.6 km/h)
-                     max_stop_duration: int = 300,  # seconds (5 minutes)
+                     max_stop_duration: int = 40,  # seconds (5 minutes)
                      min_trip_distance: float = 100,  # meters
                      min_trip_duration: int = 60) -> List[Dict]:
         """
@@ -82,10 +82,8 @@ class TripDetector:
             if current_trip is not None and last_log_time is not None:
                 time_gap = (timestamp - last_log_time).total_seconds()
                 
-                print(f"Log {i}: time gap since last log: {time_gap} seconds {timestamp}")
                 if time_gap > max_stop_duration:
                     # End current trip due to data gap
-                    print(current_trip)
                     trip_duration = (current_trip['end_time'] - current_trip['start_time']).total_seconds()
                     
                     # Validate trip
