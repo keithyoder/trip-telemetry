@@ -22,5 +22,5 @@ class OdometerToday(Sensor):
             value=0.0,
             color="#FFFFFF",  # White numbers
             backgroundColor="#000000",  # Black background
-            size=32,  # Adjust size as needed
+            size=24,  # Adjust size as needed
         )
