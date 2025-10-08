@@ -10,7 +10,11 @@ from helpers.solar_position import SolarPosition
 class GPS(Device):
     def __init__(self):
         super().__init__("GPS")
-        gpsd.connect()
+        try:
+            gpsd.connect()
+            self.connected = True
+        except:
+            self.connected = False
         self.values = {}
         self.report = None
         self.device = None
@@ -37,4 +41,4 @@ class GPS(Device):
         return sp
     
     def is_connected(self):
-        return True
+        return self.connected

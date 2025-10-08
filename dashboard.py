@@ -79,7 +79,7 @@ def update_output(n):
     else:
         light = f"{values['ltr390_lux']:.0f}"
 
-    return [figure, pressure, light, humidity, f"{odometer_today.value():0>6}"]
+    return [figure, pressure, light, humidity, f"{odometer_today.value():0>6.2f}"]
 
 def read_sensors():
     while True:

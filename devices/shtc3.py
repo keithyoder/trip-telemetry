@@ -1,5 +1,3 @@
-import adafruit_shtc3
-from board import I2C
 from devices.device import Device
 from sensors.shtc3.temperature import Temperature
 from sensors.shtc3.humidity import Humidity
@@ -8,7 +6,12 @@ from sensors.shtc3.dew_point import DewPoint
 class SHTC3(Device):
     def __init__(self):
         super().__init__("SHTC3")
-        self.device = adafruit_shtc3.SHTC3(I2C())
+        try:
+            import adafruit_shtc3
+            from board import I2C
+            self.device = adafruit_shtc3.SHTC3(I2C())
+        except:
+            self.device = None
         self.values = {}
         self.sensors = [
             Temperature(self.device),

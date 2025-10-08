@@ -10,13 +10,16 @@
 
 
 from devices.device import Device
-from obd import OBD, commands
+from obd import OBD
+from sensors.obd.speed import Speed
 
 class USBOBD(Device):
     def __init__(self, port):
         super().__init__("OBD")
         self.obd = OBD(port, fast=False)
-        self.commands = { "Speed": commands.SPEED }
+        self.sensors = [
+            Speed(self)
+        ]
 
     def close(self):
         self.obd.close()
@@ -27,13 +30,10 @@ class USBOBD(Device):
     def supported_commands(self):
         return self.obd.supported_commands
 
-    def read(self):
-        values = {}
-        for name, cmd in self.commands.items():
-            response = self.obd.query(cmd)
-            if not response.is_null():
-                try:
-                    values[name] = float(response.value.magnitude)
-                except:
-                    values[name] = None
-        self.lastest_values = values
+    def query(self, cmd):
+        response = self.obd.query(cmd)
+        if not response.is_null():
+            try:
+                return float(response.value.magnitude)
+            except:
+                return None
