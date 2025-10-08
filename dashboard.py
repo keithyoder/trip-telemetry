@@ -78,15 +78,10 @@ def update_output(n):
 
 def read_sensors():
     while True:
-        print("before gps")
-        print(values.get("timestamp"))
-        values["timestamp"] = values.get("gps_timestamp", datetime.now(UTC).replace(microsecond=0))
-        print("after gps")
-        print(values.get("gps_timestamp"))
-        print(values["timestamp"])
         for device in devices:
             if device.is_connected():
                 device.read()
+        values["timestamp"] = values.get("gps_timestamp", datetime.now(UTC).replace(microsecond=0))
         time.sleep(1)
         for device in devices:
             values.update(device.values)
