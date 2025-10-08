@@ -1,4 +1,5 @@
 from sensors.sensor import Sensor
+from datetime import datetime
 
 class Time(Sensor):
     def __init__(self, device):
@@ -6,6 +7,6 @@ class Time(Sensor):
 
     def value(self):
         try:
-            return super().value(self.device.report.time)
+            return super().value(datetime.fromisoformat(self.device.report.time))
         except:
             return None
