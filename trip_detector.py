@@ -82,7 +82,7 @@ class TripDetector:
             if current_trip is not None and last_log_time is not None:
                 time_gap = (timestamp - last_log_time).total_seconds()
                 
-                print(f"Log {i}: time gap since last log: {time_gap} seconds")
+                print(f"Log {i}: time gap since last log: {time_gap} seconds {timestamp}")
                 if time_gap > max_stop_duration:
                     # End current trip due to data gap
                     print(current_trip)
