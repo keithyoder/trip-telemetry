@@ -36,7 +36,7 @@ class TripDetector:
                      start_date: datetime = None,
                      end_date: datetime = None,
                      min_speed: float = 1.0,  # m/s (~3.6 km/h)
-                     max_stop_duration: int = 40,  # seconds (5 minutes)
+                     max_stop_duration: int = 300,  # seconds (5 minutes)
                      min_trip_distance: float = 100,  # meters
                      min_trip_duration: int = 60) -> List[Dict]:
         """
