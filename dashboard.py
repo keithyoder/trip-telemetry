@@ -78,14 +78,14 @@ def update_output(n):
 
 def read_sensors():
     while True:
+        values["timestamp"] = datetime.now(UTC).replace(microsecond=0)
         for device in devices:
             if device.is_connected():
                 device.read()
-        values["timestamp"] = values.get("gps_timestamp", datetime.now(UTC).replace(microsecond=0))
         time.sleep(1)
         for device in devices:
             values.update(device.values)
-        
+        values["timestamp"] = values.get("gps_timestamp", values["timestamp"])        
         logger.write(values)
 
 def run_async_loop(loop):
