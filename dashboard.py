@@ -55,7 +55,7 @@ app.layout = html.Div(
         Output('bmp581_pressure', 'value'),
         Output('ltr390_ambient_light', 'value'),
         Output('shtc3_humidity', 'figure'),
-        Output('odometer_today', 'figure'),
+        Output('odometer_today', 'value'),
     ],
     Input('interval-component', 'n_intervals')
 )
@@ -79,7 +79,7 @@ def update_output(n):
     else:
         light = f"{values['ltr390_lux']:.0f}"
 
-    return [figure, pressure, light, humidity, odometer_today.value() or 0.0]
+    return [figure, pressure, light, humidity, odometer_today.value()]
 
 def read_sensors():
     while True:
