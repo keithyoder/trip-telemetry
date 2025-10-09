@@ -18,6 +18,8 @@
 
 ### OBD II Scanner
 
+* ELM327 USB Scanner
+* ![Image](obdscanner.avif)
 * [Python-ODB](https://github.com/brendan-w/python-OBD/)
 
 ### Qwiic Hat for Raspberry Pi
