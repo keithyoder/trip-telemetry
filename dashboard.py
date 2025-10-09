@@ -11,14 +11,17 @@ from devices.shtc3 import SHTC3
 from devices.gps import GPS
 from loggers.mongodb import MongoDBLogger
 from sensors.calculated.odometer_today import OdometerToday
+from dotenv import load_dotenv
+import os
 
 LOG_FILE = "dashboard_log.json"
+load_dotenv()
 
 bmp581 = BMP581(1019)
 ltr390 = LTR390()
 shtc3 = SHTC3()
 usb_gps = GPS()
-usb_odb = USBOBD('/dev/tty.usbserial-1130')
+usb_odb = USBOBD(os.environ.get('ODB_PORT', 'ttyUSB0'))
 odometer_today = OdometerToday()
 
 devices = [bmp581, ltr390, usb_odb, shtc3, usb_gps]
