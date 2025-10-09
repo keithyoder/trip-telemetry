@@ -1,4 +1,13 @@
-# pi-i2c-logger
+# TripTelemetry
+
+The goal of this project is to create a Python app that will run on a Raspberry Pi installed in a vehicle and record data from different sensors.  The supported sensors are listed here:
+
+[Sensors](SENSORS.md)
+
+Currently data is logged to a MongoDB collection once every second.
+
+
+### Installation
 
 To create a virtual environment, go to your project’s directory and run the following command. This will create a new virtual environment in a local folder named .venv:
 
