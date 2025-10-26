@@ -14,7 +14,7 @@ def MongoClient():
     return client, db, collection
 
 class MongoDBLogger:
-    def __init__(self, enable_rabbitmq=True):
+    def __init__(self, enable_rabbitmq=False):
         self.client, self.db, self.collection = MongoClient()
         self.rabbitmq_enabled = enable_rabbitmq
         self.rabbitmq_connection = None

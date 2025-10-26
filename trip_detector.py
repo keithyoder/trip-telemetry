@@ -5,14 +5,14 @@ import math
 import os
 import pandas as pd
 from geopandas import GeoDataFrame
-from shapely.geometry import LineString, Point
+from shapely.geometry import LineString
 from loggers.mongodb import MongoClient
 from helpers.today import Today
 
 class TripDetector:
     def __init__(self):
         """Initialize connection to MongoDB"""
-        self.client, self.db, self.collection = MongoClient()
+        _, _, self.collection = MongoClient()
         self.cached_trips = []  # Store all detected trips
         self.last_processed_timestamp = None  # Track last processed log
         self.current_incomplete_trip = None  # Store ongoing trip state
@@ -115,11 +115,9 @@ class TripDetector:
         
         # Build query
         query = {}
-        actual_start_date = start_date
         
         if use_cache and self.last_processed_timestamp is not None:
             # Only query logs after last processed timestamp
-            actual_start_date = self.last_processed_timestamp
             query['timestamp'] = {'$gt': self.last_processed_timestamp}
             
             # Also apply end_date if specified
