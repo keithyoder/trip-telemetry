@@ -20,7 +20,7 @@ class MongoDBLogger:
     def __init__(self, enable_rabbitmq=None):
         self.client, self.db, self.collection = MongoClient()
         if enable_rabbitmq is None:
-            enable_rabbitmq = env('RABBITMQ_ENABLED', 'true').lower() in ('true', '1', 'yes')
+            enable_rabbitmq = env.get('RABBITMQ_ENABLED', 'true').lower() in ('true', '1', 'yes')
      
         self.rabbitmq_enabled = enable_rabbitmq
         self.rabbitmq_connection = None
