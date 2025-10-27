@@ -5,7 +5,10 @@ from bson import json_util
 from helpers.today import Today
 from dotenv import load_dotenv
 from os import environ as env
+from datetime import datetime
+from bson import ObjectId
 
+load_dotenv()
 
 def MongoClient():
     client = pymongo.MongoClient('localhost', 27017)
@@ -14,8 +17,11 @@ def MongoClient():
     return client, db, collection
 
 class MongoDBLogger:
-    def __init__(self, enable_rabbitmq=False):
+    def __init__(self, enable_rabbitmq=None)):
         self.client, self.db, self.collection = MongoClient()
+        if enable_rabbitmq is None:
+            enable_rabbitmq = env('RABBITMQ_ENABLED', 'true').lower() in ('true', '1', 'yes')
+     
         self.rabbitmq_enabled = enable_rabbitmq
         self.rabbitmq_connection = None
         self.rabbitmq_channel = None
@@ -26,7 +32,6 @@ class MongoDBLogger:
     def _setup_rabbitmq(self):
         """Initialize RabbitMQ connection"""
         try:
-            load_dotenv()
             credentials = pika.PlainCredentials(env.get('RABBITMQ_USER'), env.get('RABBITMQ_PASSWORD'))
             parameters = pika.ConnectionParameters(
                 env.get('RABBITMQ_HOST'),
@@ -50,25 +55,48 @@ class MongoDBLogger:
             return
         
         try:
+            # Clean the document to remove MongoDB types
+            clean_doc = self._clean_document(document)
+            
             message = {
                 'collection': 'logs',
-                'document': document,
-                'timestamp': document.get('timestamp')
+                'document': clean_doc,
+                'timestamp': clean_doc.get('timestamp')
             }
             
+            # Use regular json.dumps (not json_util.default)
             self.rabbitmq_channel.basic_publish(
                 exchange='',
                 routing_key='telemetry_sync',
-                body=json.dumps(message, default=json_util.default),
+                body=json.dumps(message),  # Regular JSON, not MongoDB extended JSON
                 properties=pika.BasicProperties(
-                    delivery_mode=2,  # Make message persistent
+                    delivery_mode=2,
                 )
             )
             print(f"Published to RabbitMQ: {document.get('_id')}")
         except Exception as e:
             print(f"RabbitMQ publish error: {e}")
-            # Try to reconnect
             self._setup_rabbitmq()
+
+    def _clean_document(self, document):
+        """Convert MongoDB document to plain JSON"""
+        clean = {}
+        for key, value in document.items():
+            clean[key] = self._clean_value(value)
+        return clean
+
+    def _clean_value(self, value):
+        """Clean a single value"""
+        if isinstance(value, datetime):
+            return value.isoformat()
+        elif isinstance(value, ObjectId):
+            return str(value)
+        elif isinstance(value, dict):
+            return self._clean_document(value)
+        elif isinstance(value, list):
+            return [self._clean_value(v) for v in value]
+        else:
+            return value
 
     def close(self):
         """Close MongoDB and RabbitMQ connections"""
