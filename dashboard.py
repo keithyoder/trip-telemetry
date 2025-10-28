@@ -9,7 +9,9 @@ from devices.ltr390 import LTR390
 from devices.usb_obd import USBOBD
 from devices.shtc3 import SHTC3
 from devices.gps import GPS
-from loggers.mongodb import MongoDBLogger
+#from loggers.mongodb import MongoDBLogger
+from loggers.rabbit_mq import RabbitMQLogger
+
 from sensors.calculated.odometer_today import OdometerToday
 from dotenv import load_dotenv
 import os
@@ -27,7 +29,8 @@ odometer_today = OdometerToday()
 devices = [bmp581, ltr390, usb_odb, shtc3, usb_gps]
 values = {}
 
-logger = MongoDBLogger()
+#logger = MongoDBLogger()
+logger = RabbitMQLogger()
 app = Dash()
 
 app.layout = html.Div(
