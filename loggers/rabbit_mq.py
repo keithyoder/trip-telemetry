@@ -7,7 +7,7 @@ from bson import ObjectId
 from dotenv import load_dotenv
 import threading
 import time
-from mongodb import MongoClient
+from loggers.mongodb import MongoClient
 
 load_dotenv()
 
