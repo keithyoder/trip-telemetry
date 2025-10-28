@@ -47,8 +47,8 @@ class RabbitMQLogger:
         self.sync_thread = threading.Thread(target=self._sync_loop, daemon=True)
         self.sync_thread.start()
         
-        print("🚀 RabbitMQ Queue Logger initialized")
-        print(f"📊 Queue size: {self.get_queue_size()} messages")
+        print("[INIT] RabbitMQ Queue Logger initialized")
+        print(f"[QUEUE] Queue size: {self.get_queue_size()} messages")
 
     def _setup_rabbitmq(self):
         """Attempt to connect to RabbitMQ"""
@@ -84,7 +84,7 @@ class RabbitMQLogger:
             )
             
             self.is_connected = True
-            print(f"✅ Connected to RabbitMQ at {host}")
+            print(f"[OK] Connected to RabbitMQ at {host}")
             return True
             
         except Exception as e:
@@ -138,7 +138,7 @@ class RabbitMQLogger:
             return True
             
         except Exception as e:
-            print(f"⚠️  Publish failed: {e}")
+            print(f"[ERROR]  Publish failed: {e}")
             self.is_connected = False
             return False
 
@@ -168,16 +168,16 @@ class RabbitMQLogger:
                 break
         
         if synced_count > 0:
-            print(f"✅ Synced {synced_count} messages to RabbitMQ")
+            print(f"[OK] Synced {synced_count} messages to RabbitMQ")
             remaining = self.get_queue_size()
             if remaining > 0:
-                print(f"📊 {remaining} messages remaining in queue")
+                print(f"[QUEUE] {remaining} messages remaining in queue")
         
         return synced_count
 
     def _sync_loop(self):
         """Background thread that continuously tries to sync"""
-        print(f"🔄 Sync loop started (interval: {self.sync_interval}s)")
+        print(f"[QUEUE] Sync loop started (interval: {self.sync_interval}s)")
         
         while self.running:
             try:
@@ -185,7 +185,7 @@ class RabbitMQLogger:
                 
                 if queue_size > 0:
                     if not self.is_connected:
-                        print(f"📡 Attempting to connect... ({queue_size} messages queued)")
+                        print(f"[SYNC] Attempting to connect... ({queue_size} messages queued)")
                     
                     self._sync_queue()
                 
@@ -193,7 +193,7 @@ class RabbitMQLogger:
                 time.sleep(self.sync_interval)
                 
             except Exception as e:
-                print(f"❌ Sync loop error: {e}")
+                print(f"[ERROR] Sync loop error: {e}")
                 time.sleep(self.sync_interval)
 
     def write(self, data):
@@ -209,7 +209,7 @@ class RabbitMQLogger:
             
             # Save to MongoDB logs
             self.collection.insert_one(data)
-            print(f"✅ Saved to MongoDB: {data['_id']}")
+            print(f"[OK] Saved to MongoDB: {data['_id']}")
             
             # Prepare message for RabbitMQ
             clean_doc = self._clean_document(data)
@@ -221,7 +221,7 @@ class RabbitMQLogger:
             
             # Try to publish immediately if connected
             if self.is_connected and self._publish_message(message):
-                print(f"✅ Published to RabbitMQ: {data['_id']}")
+                print(f"[OK] Published to RabbitMQ: {data['_id']}")
             else:
                 # Queue for later sync
                 self.queue_collection.insert_one({
@@ -229,10 +229,10 @@ class RabbitMQLogger:
                     'created_at': datetime.now(),
                     'log_id': data['_id']
                 })
-                print(f"📥 Queued for sync: {data['_id']}")
+                print(f"[QUEUE] Queued for sync: {data['_id']}")
                 
         except Exception as e:
-            print(f"❌ Write error: {e}")
+            print(f"[ERROR] Write error: {e}")
 
     def get_queue_size(self):
         """Get number of messages waiting to be synced"""
@@ -244,18 +244,18 @@ class RabbitMQLogger:
 
     def force_sync(self):
         """Manually trigger a sync attempt"""
-        print("🔄 Manual sync triggered")
+        print("[SYNC] Manual sync triggered")
         return self._sync_queue()
 
     def clear_queue(self):
         """Clear all queued messages (use with caution!)"""
         count = self.get_queue_size()
         self.queue_collection.delete_many({})
-        print(f"🗑️  Cleared {count} messages from queue")
+        print(f"[CLEAR]  Cleared {count} messages from queue")
 
     def close(self):
         """Close connections and stop sync thread"""
-        print("🛑 Shutting down logger...")
+        print("[STOP] Shutting down logger...")
         self.running = False
         
         # Wait for sync thread to finish
@@ -264,17 +264,17 @@ class RabbitMQLogger:
         
         # Final sync attempt
         if self.get_queue_size() > 0:
-            print("🔄 Final sync attempt...")
+            print("[SYNC] Final sync attempt...")
             self._sync_queue()
         
         # Close connections
         if self.rabbitmq_connection and not self.rabbitmq_connection.is_closed:
             try:
                 self.rabbitmq_connection.close()
-                print("🔌 RabbitMQ connection closed")
+                print("[CLOSE] RabbitMQ connection closed")
             except:
                 pass
         
         self.client.close()
-        print("🔌 MongoDB connection closed")
-        print(f"📊 Final queue size: {self.get_queue_size()}")
+        print("[CLOSE] MongoDB connection closed")
+        print(f"[QUEUE] Final queue size: {self.get_queue_size()}")
