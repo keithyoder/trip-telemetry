@@ -11,7 +11,7 @@ from loggers.mongodb import MongoClient
 
 load_dotenv()
 
-class RabbitMQQueueLogger:
+class RabbitMQLogger:
     def __init__(self, rabbitmq_config=None, sync_interval=30):
         """
         Offline-first logger that queues to MongoDB and syncs to RabbitMQ when connected
