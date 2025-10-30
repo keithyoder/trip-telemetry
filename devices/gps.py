@@ -5,6 +5,9 @@ from sensors.gps.longitude import Longitude
 from sensors.gps.altitude import Altitude
 from sensors.gps.speed import Speed
 from sensors.gps.time import Time
+from sensors.gps.climb import Climb
+from sensors.gps.satellites import Satellites
+from sensors.gps.heading import Heading
 from helpers.solar_position import SolarPosition
 
 class GPS(Device):
@@ -23,7 +26,10 @@ class GPS(Device):
             Latitude(self),
             Longitude(self),
             Altitude(self),
-            Speed(self)
+            Speed(self),
+            Climb(self),
+            Satellites(self),
+            Heading(self)
         ]
 
     def read(self):
