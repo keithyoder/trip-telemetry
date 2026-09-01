@@ -92,7 +92,10 @@ def read_sensors():
         values["timestamp"] = datetime.now(UTC).replace(microsecond=0)
         for device in devices:
             if device.is_connected():
-                device.read()
+                try:
+                    device.read()
+                except Exception as e:
+                    print(f"[ERROR] {device.name} read failed: {e}")
         time.sleep(1)
         for device in devices:
             values.update(device.values)

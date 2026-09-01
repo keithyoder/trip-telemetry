@@ -33,7 +33,10 @@ class GPS(Device):
         ]
 
     def read(self):
-        self.report = gpsd.get_current()
+        try:
+            self.report = gpsd.get_current()
+        except Exception:
+            self.report = None
         super().read()
 
     def solar_position(self):
