@@ -19,11 +19,13 @@ import os
 LOG_FILE = "dashboard_log.json"
 load_dotenv()
 
+DEVICE = os.environ.get('DEVICE', 'pi')
+
 bmp581 = BMP581(1019)
 ltr390 = LTR390()
 shtc3 = SHTC3()
 usb_gps = GPS()
-usb_odb = USBOBD(os.environ.get('ODB_PORT', 'ttyUSB0'))
+usb_odb = USBOBD(os.environ.get('ODB_PORT', '/dev/ttyUSB0'))
 odometer_today = OdometerToday()
 
 devices = [bmp581, ltr390, usb_odb, shtc3, usb_gps]
@@ -90,6 +92,7 @@ def update_output(n):
 def read_sensors():
     while True:
         values["timestamp"] = datetime.now(UTC).replace(microsecond=0)
+        values["device"] = DEVICE
         for device in devices:
             if device.is_connected():
                 try:
@@ -99,7 +102,8 @@ def read_sensors():
         time.sleep(1)
         for device in devices:
             values.update(device.values)
-        values["timestamp"] = values.get("gps_timestamp", values["timestamp"])        
+        gps_timestamp = values.get("gps_timestamp")
+        values["timestamp"] = gps_timestamp if gps_timestamp is not None else values["timestamp"]
         logger.write(values)
 
 def run_async_loop(loop):
