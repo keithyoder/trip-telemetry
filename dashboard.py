@@ -118,4 +118,4 @@ if __name__ == '__main__':
     async_thread.daemon = True # Allow the main program to exit even if this thread is running
     async_thread.start()
 
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', debug=False, use_reloader=False)
