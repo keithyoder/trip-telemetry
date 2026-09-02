@@ -24,6 +24,7 @@ from sensors.obd.throttle_position import ThrottlePosition
 from sensors.obd.timing_advance import TimingAdvance
 from sensors.obd.intake_air_temp import IntakeAirTemp
 from sensors.obd.battery_voltage import BatteryVoltage
+from sensors.obd.fuel_used import FuelUsed
 
 
 class USBOBD(Device):
@@ -40,6 +41,7 @@ class USBOBD(Device):
             TimingAdvance(self),
             IntakeAirTemp(self),
             BatteryVoltage(self),
+            FuelUsed(self),
         ]
 
     def close(self):
