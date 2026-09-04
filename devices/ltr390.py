@@ -11,7 +11,7 @@ class LTR390(Device):
             from board import I2C
             self.device = adafruit_ltr390.LTR390(I2C())
             self.device.gain = adafruit_ltr390.Gain.GAIN_1X
-            self.device.resolution = adafruit_ltr390.Resolution.RESOLUTION_20BIT
+            self.device.resolution = adafruit_ltr390.Resolution.RESOLUTION_16BIT
         except:
             self.device = None
         self.values = {}

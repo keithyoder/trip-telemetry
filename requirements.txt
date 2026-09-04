@@ -1,8 +1,10 @@
 obd==0.7.3
 matplotlib==3.11.1
+Adafruit-Blinka==9.2.0
 adafruit-circuitpython-bmp5xx==1.0.0
 adafruit-circuitpython-ltr390==1.1.21
 adafruit-circuitpython-shtc3==1.1.19
+Adafruit-PlatformDetect==3.89.1
 setuptools==84.0.0
 dash_daq==0.6.0
 pymongo==4.17.0
